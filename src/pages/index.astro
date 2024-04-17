@@ -17,36 +17,36 @@ const [first, second, third, ...rest] = posts;
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body
-    class="mt-14 mx-auto px-6 max-w-screen-sm bg-neutral-900 text-neutral-300 text-lg font-light"
+    class="mt-14 mx-auto px-6 max-w-screen-sm bg-zinc-900 text-zinc-300 text-lg font-light"
   >
     <header>
-      <h1 class="text-neutral-50 text-5xl mb-2">Ryan Forgie</h1>
+      <h1 class="text-zinc-50 text-5xl mb-2">Ryan Forgie</h1>
       <p>
         I work with other people to create software products. Scottish software
         engineer based in New Zealand. Find me on <a
           href="https://www.linkedin.com/in/ryan-forgie/"
-          class="underline hover:text-neutral-50"
+          class="underline hover:text-zinc-50"
           target="_blank">LinkedIn</a
         >.
       </p>
     </header>
     <main>
       <section class="mt-14">
-        <h2 class="text-neutral-50 font-medium mb-2">Articles</h2>
+        <h2 class="text-zinc-50 font-medium mb-2">Articles</h2>
         <ul>
           <li class="my-2">
             <a href={`/blog/${first.slug}/`}>
-              <h4>{first.data.title}</h4>
+              {first.data.title}
             </a>
           </li>
           <li class="my-2">
             <a href={`/blog/${second.slug}/`}>
-              <h4>{second.data.title}</h4>
+              {second.data.title}
             </a>
           </li>
           <li class="my-2">
             <a href={`/blog/${third.slug}/`}>
-              <h4>{third.data.title}</h4>
+              {third.data.title}
             </a>
           </li>
           <details>
@@ -54,9 +54,7 @@ const [first, second, third, ...rest] = posts;
             {
               rest.map((post) => (
                 <li class="my-2">
-                  <a href={`/blog/${post.slug}/`}>
-                    <h4>{post.data.title}</h4>
-                  </a>
+                  <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
                 </li>
               ))
             }
@@ -64,21 +62,21 @@ const [first, second, third, ...rest] = posts;
         </ul>
       </section>
       <section class="mt-14">
-        <h2 class="text-neutral-50 font-medium mb-2">Lists</h2>
+        <h2 class="text-zinc-50 font-medium mb-2">Lists</h2>
         <ul>
           <li class="my-2">
             <a href={`/blog/${first.slug}/`}>
-              <h4>{first.data.title}</h4>
+              {first.data.title}
             </a>
           </li>
           <li class="my-2">
             <a href={`/blog/${second.slug}/`}>
-              <h4>{second.data.title}</h4>
+              {second.data.title}
             </a>
           </li>
           <li class="my-2">
             <a href={`/blog/${third.slug}/`}>
-              <h4>{third.data.title}</h4>
+              {third.data.title}
             </a>
           </li>
           <details>
@@ -86,9 +84,7 @@ const [first, second, third, ...rest] = posts;
             {
               rest.map((post) => (
                 <li class="my-2">
-                  <a href={`/blog/${post.slug}/`}>
-                    <h4>{post.data.title}</h4>
-                  </a>
+                  <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
                 </li>
               ))
             }
@@ -96,21 +92,21 @@ const [first, second, third, ...rest] = posts;
         </ul>
       </section>
       <section class="mt-14">
-        <h2 class="text-neutral-50 font-medium mb-2">Work Journal Entries</h2>       
+        <h2 class="text-zinc-50 font-medium mb-2">Work Journal Entries</h2>
         <ul>
           <li class="my-2">
             <a href={`/blog/${first.slug}/`}>
-              <h4>{first.data.title}</h4>
+              {first.data.title}
             </a>
           </li>
           <li class="my-2">
             <a href={`/blog/${second.slug}/`}>
-              <h4>{second.data.title}</h4>
+              {second.data.title}
             </a>
           </li>
           <li class="my-2">
             <a href={`/blog/${third.slug}/`}>
-              <h4>{third.data.title}</h4>
+              {third.data.title}
             </a>
           </li>
           <details>
@@ -118,9 +114,7 @@ const [first, second, third, ...rest] = posts;
             {
               rest.map((post) => (
                 <li class="my-2">
-                  <a href={`/blog/${post.slug}/`}>
-                    <h4>{post.data.title}</h4>
-                  </a>
+                  <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
                 </li>
               ))
             }
