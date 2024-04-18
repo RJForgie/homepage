@@ -1,9 +1,6 @@
 - robots.txt
 - audit accessibility
 - base styles
-- social links
 - RSS Feed
-- favicon
-- icons in headings
 - counts in headings
 - create section component
