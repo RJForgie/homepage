@@ -1,0 +1,43 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+const { title = SITE_TITLE, description = SITE_DESCRIPTION} = Astro.props;
+
+const today = new Date();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body
+    class="mt-14 mx-auto px-6 max-w-screen-sm bg-zinc-900 text-zinc-300 text-lg font-light"
+  >
+    <header>
+      <h1 class="text-zinc-50 text-5xl mb-2">Ryan Forgie</h1>
+      <p>
+        I work with other people to create software products. Scottish software
+        engineer based in New Zealand. Find me on <a
+          href="https://www.linkedin.com/in/ryan-forgie/"
+          class="underline hover:text-zinc-50"
+          target="_blank">LinkedIn</a
+        >.
+      </p>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="mt-14">
+      <div>
+        <a
+          href="https://www.linkedin.com/in/ryan-forgie/"
+          target="_blank"
+          class="underline hover:text-zinc-50"
+          >LinkedIn
+        </a>
+      </div>
+      &copy; {today.getFullYear()} Ryan Forgie. All rights reserved.
+    </footer>
+  </body>
+</html>

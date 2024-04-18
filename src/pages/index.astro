@@ -1,7 +1,5 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Footer from "../components/Footer.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 
 const posts = (await getCollection("blog")).sort(
@@ -11,123 +9,101 @@ const posts = (await getCollection("blog")).sort(
 const [first, second, third, ...rest] = posts;
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-  </head>
-  <body
-    class="mt-14 mx-auto px-6 max-w-screen-sm bg-zinc-900 text-zinc-300 text-lg font-light"
-  >
-    <header>
-      <h1 class="text-zinc-50 text-5xl mb-2">Ryan Forgie</h1>
-      <p>
-        I work with other people to create software products. Scottish software
-        engineer based in New Zealand. Find me on <a
-          href="https://www.linkedin.com/in/ryan-forgie/"
-          class="underline hover:text-zinc-50"
-          target="_blank">LinkedIn</a
-        >.
-      </p>
-    </header>
-    <main>
-      <section class="mt-14">
-        <h2 class="text-zinc-50 font-medium mb-2">Articles</h2>
-        <ul>
-          <li class="my-2">
-            <a href={`/blog/${first.slug}/`} class="underline">
-              {first.data.title}
-            </a>
-          </li>
-          <li class="my-2">
-            <a href={`/blog/${second.slug}/`} class="underline">
-              {second.data.title}
-            </a>
-          </li>
-          <li class="my-2">
-            <a href={`/blog/${third.slug}/`} class="underline">
-              {third.data.title}
-            </a>
-          </li>
-          <details>
-            <summary>More</summary>
-            {
-              rest.map((post) => (
-                <li class="my-2">
-                  <a href={`/blog/${post.slug}/`} class="underline">
-                    {post.data.title}
-                  </a>
-                </li>
-              ))
-            }
-          </details>
-        </ul>
-      </section>
-      <section class="mt-14">
-        <h2 class="text-zinc-50 font-medium mb-2">Lists</h2>
-        <ul>
-          <li class="my-2">
-            <a href={`/blog/${first.slug}/`} class="underline">
-              {first.data.title}
-            </a>
-          </li>
-          <li class="my-2">
-            <a href={`/blog/${second.slug}/`} class="underline">
-              {second.data.title}
-            </a>
-          </li>
-          <li class="my-2">
-            <a href={`/blog/${third.slug}/`} class="underline">
-              {third.data.title}
-            </a>
-          </li>
-          <details>
-            <summary>More</summary>
-            {
-              rest.map((post) => (
-                <li class="my-2">
-                  <a href={`/blog/${post.slug}/`} class="underline">
-                    {post.data.title}
-                  </a>
-                </li>
-              ))
-            }
-          </details>
-        </ul>
-      </section>
-      <section class="mt-14">
-        <h2 class="text-zinc-50 font-medium mb-2">Work Journal Entries</h2>
-        <ul>
-          <li class="my-2">
-            <a href={`/blog/${first.slug}/`} class="underline">
-              {first.data.title}
-            </a>
-          </li>
-          <li class="my-2">
-            <a href={`/blog/${second.slug}/`} class="underline">
-              {second.data.title}
-            </a>
-          </li>
-          <li class="my-2">
-            <a href={`/blog/${third.slug}/`} class="underline">
-              {third.data.title}
-            </a>
-          </li>
-          <details>
-            <summary>More</summary>
-            {
-              rest.map((post) => (
-                <li class="my-2">
-                  <a href={`/blog/${post.slug}/`} class="underline">
-                    {post.data.title}
-                  </a>
-                </li>
-              ))
-            }
-          </details>
-        </ul>
-      </section>
-    </main>
-    <Footer />
-  </body>
-</html>
+<BaseLayout>
+  <section class="mt-14">
+    <h2 class="text-zinc-50 font-medium mb-2">Articles</h2>
+    <ul>
+      <li class="my-2">
+        <a href={`/blog/${first.slug}/`} class="underline">
+          {first.data.title}
+        </a>
+      </li>
+      <li class="my-2">
+        <a href={`/blog/${second.slug}/`} class="underline">
+          {second.data.title}
+        </a>
+      </li>
+      <li class="my-2">
+        <a href={`/blog/${third.slug}/`} class="underline">
+          {third.data.title}
+        </a>
+      </li>
+      <details>
+        <summary>More</summary>
+        {
+          rest.map((post) => (
+            <li class="my-2">
+              <a href={`/blog/${post.slug}/`} class="underline">
+                {post.data.title}
+              </a>
+            </li>
+          ))
+        }
+      </details>
+    </ul>
+  </section>
+  <section class="mt-14">
+    <h2 class="text-zinc-50 font-medium mb-2">Lists</h2>
+    <ul>
+      <li class="my-2">
+        <a href={`/blog/${first.slug}/`} class="underline">
+          {first.data.title}
+        </a>
+      </li>
+      <li class="my-2">
+        <a href={`/blog/${second.slug}/`} class="underline">
+          {second.data.title}
+        </a>
+      </li>
+      <li class="my-2">
+        <a href={`/blog/${third.slug}/`} class="underline">
+          {third.data.title}
+        </a>
+      </li>
+      <details>
+        <summary>More</summary>
+        {
+          rest.map((post) => (
+            <li class="my-2">
+              <a href={`/blog/${post.slug}/`} class="underline">
+                {post.data.title}
+              </a>
+            </li>
+          ))
+        }
+      </details>
+    </ul>
+  </section>
+  <section class="mt-14">
+    <h2 class="text-zinc-50 font-medium mb-2">Work Journal Entries</h2>
+    <ul>
+      <li class="my-2">
+        <a href={`/blog/${first.slug}/`} class="underline">
+          {first.data.title}
+        </a>
+      </li>
+      <li class="my-2">
+        <a href={`/blog/${second.slug}/`} class="underline">
+          {second.data.title}
+        </a>
+      </li>
+      <li class="my-2">
+        <a href={`/blog/${third.slug}/`} class="underline">
+          {third.data.title}
+        </a>
+      </li>
+      <details>
+        <summary>More</summary>
+        {
+          rest.map((post) => (
+            <li class="my-2">
+              <a href={`/blog/${post.slug}/`} class="underline">
+                {post.data.title}
+              </a>
+            </li>
+          ))
+        }
+      </details>
+    </ul>
+  </section>
+</BaseLayout>
