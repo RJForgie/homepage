@@ -9,7 +9,7 @@ const posts = (await getCollection("blog")).sort(
 const [first, second, third, ...rest] = posts;
 ---
 
-<BaseLayout>
+<BaseLayout showHeader=true>
   <section class="mt-14">
     <h2 class="text-zinc-50 font-medium mb-2">Articles</h2>
     <ul>
