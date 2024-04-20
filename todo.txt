@@ -1,6 +1,4 @@
 - robots.txt
-- audit accessibility
-- base styles
 - RSS Feed
 - counts in headings
 - create section component
