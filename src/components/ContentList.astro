@@ -1,0 +1,55 @@
+---
+import { getCollection } from "astro:content";
+
+interface Props {
+  contentType: "blog" | "list" | "journal";
+}
+
+const { contentType } = Astro.props;
+
+const content = (await getCollection("posts")).sort(
+  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+);
+const matchedContent = content.filter(
+  (post) => post.data.contentType === contentType
+);
+const highlights = matchedContent.filter(
+  (highlight) => highlight.data.highlight
+);
+const posts = matchedContent.filter((highlight) => !highlight.data.highlight);
+---
+
+<section class="mt-14">
+  <h2 class="text-zinc-50 font-medium mb-2">Articles</h2>
+  <ul>
+    {
+      highlights.map((highlight) => (
+        <li class="my-2">
+          <a
+            href={`/${contentType}/${highlight.slug}/`}
+            class="underline hover:text-zinc-50"
+          >
+            {highlight.data.title}
+          </a>
+        </li>
+      ))
+    }
+    {
+      posts.length > 0 && (
+        <details>
+          <summary>More</summary>
+          {posts.map((post) => (
+            <li class="my-2">
+              <a
+                href={`/${contentType}/${post.slug}/`}
+                class="underline hover:text-zinc-50"
+              >
+                {post.data.title}
+              </a>
+            </li>
+          ))}
+        </details>
+      )
+    }
+  </ul>
+</section>
