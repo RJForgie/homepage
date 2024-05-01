@@ -1,4 +1,6 @@
 - robots.txt
 - RSS Feed
 - counts in headings
-- create section component
+- refactor filtering in section component
+- readme details
+- github action for deploy
