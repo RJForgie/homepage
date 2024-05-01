@@ -2,26 +2,26 @@
 import { getCollection } from "astro:content";
 
 interface Props {
-  contentType: "blog" | "list" | "journal";
+  contentType: "articles" | "lists" | "journal";
 }
 
 const { contentType } = Astro.props;
 
-const content = (await getCollection("posts")).sort(
+const posts = (await getCollection(contentType)).sort(
   (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
 );
-const matchedContent = content.filter(
+const matchedContent = posts.filter(
   (post) => post.data.contentType === contentType
 );
 const highlights = matchedContent.filter(
   (highlight) => highlight.data.highlight
 );
-const posts = matchedContent.filter((highlight) => !highlight.data.highlight);
+const nonHighlightPosts = matchedContent.filter((highlight) => !highlight.data.highlight);
 ---
 
 <section class="mt-14">
-  <h2 class="text-zinc-50 font-medium mb-2">Articles</h2>
-  <ul>
+  <h2 class="text-zinc-50 font-medium mb-2 capitalize">{contentType}</h2>
+  <ol class="list-decimal list-inside">
     {
       highlights.map((highlight) => (
         <li class="my-2">
@@ -35,10 +35,10 @@ const posts = matchedContent.filter((highlight) => !highlight.data.highlight);
       ))
     }
     {
-      posts.length > 0 && (
+      nonHighlightPosts.length > 0 && (
         <details>
           <summary>More</summary>
-          {posts.map((post) => (
+          {nonHighlightPosts.map((post) => (
             <li class="my-2">
               <a
                 href={`/${contentType}/${post.slug}/`}
