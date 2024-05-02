@@ -12,7 +12,10 @@ export default {
             },
             a: {
               "text-decoration": "underline",
-            }
+            },
+            ol: {
+              "list-style-type": "decimal",
+            },
           },
         },
       },
