@@ -1,5 +1,5 @@
 ---
-title: "Current Google Chrome Extensions"
+title: "Current Google Chrome extensions"
 description: "The Google Chrome extensions I currently use"
 pubDate: "Apr 30 2024"
 contentType: "lists"
