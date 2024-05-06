@@ -16,6 +16,9 @@ export default {
             ol: {
               "list-style-type": "decimal",
             },
+            ul: {
+              "list-style-type": "disc",
+            },
           },
         },
       },
