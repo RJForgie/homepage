@@ -4,6 +4,7 @@ description: ""
 pubDate: "Apr 30 2024"
 contentType: "lists"
 highlight: true
+updatedDate: "May 15 2024"
 ---
 
 ## Adam Wathan ([@adamwathan](https://twitter.com/adamwathan) / [adamwatham.me](https://adamwathan.me/))
@@ -25,6 +26,16 @@ Best known for: Creating awesome [zines about programming](https://wizardzines.c
 - [Making hard things rasy](https://www.youtube.com/watch?v=30YWsGDr8mA) talk at Strange Loop 2023
 - [How to ask good questions](https://jvns.ca/blog/good-questions/) blog post
 - [A debugging manifesto](https://jvns.ca/blog/2022/12/08/a-debugging-manifesto/) blog post
+
+---
+
+## Takuya Matsuyama ([@inkdrop_app](https://twitter.com/inkdrop_app) / [inkdrop.app](https://www.inkdrop.app/))
+
+Best known for: Creating [Inkdrop](https://www.inkdrop.app/) tech note-taking app
+
+- [How to write markdown notes](https://docs.inkdrop.app/start-guide/how-to-write-markdown-notes) video/docs
+- [Issue-driven tech note-taking](https://docs.inkdrop.app/start-guide/issue-driven-note-taking) video/docs
+- [How I became a full-stack developer](https://www.youtube.com/watch?v=EC-FPKmFxr4) video
 
 ---
 
