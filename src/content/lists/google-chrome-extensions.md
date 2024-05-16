@@ -2,6 +2,7 @@
 title: "Current Google Chrome extensions"
 description: "The Google Chrome extensions I currently use"
 pubDate: "Apr 30 2024"
+updatedDate: "May 16 2024"
 contentType: "lists"
 ---
 
@@ -12,6 +13,14 @@ contentType: "lists"
 Navigate in the browser with only your keyboard. The keyboard shortcuts can be tricky to remember if you aren't familiar with Vim but pressing <kbd>?</kbd> shows a help dialog with a list of them.
 
 Install [Vimium](https://chromewebstore.google.com/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb)
+
+## uBlock Origin
+
+> "Finally, an efficient blocker. Easy on CPU and memory."
+
+Blocks adds and other distractions, highly configurable.
+
+Install [uBlock Origin](https://chromewebstore.google.com/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm?hl=en)
 
 ## Unhook
 
