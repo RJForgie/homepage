@@ -1,9 +1,8 @@
 # Homepage
 
+Personal website and blog built using [Astro](https://astro.build/).
 
 ## Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
 
 ```text
 ├── public/
@@ -20,7 +19,7 @@ Inside of your Astro project, you'll see the following folders and files:
 
 ## Commands
 
-All commands are run from the root of the project, from a terminal:
+All commands are run from the root of the project:
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
