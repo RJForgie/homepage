@@ -1,0 +1,154 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const managingTheTeam = [
+  "Every member of the team knows what they should be working on",
+  "Every member of the team knows what to do if they finish a task, or get blocked",
+  "Every member of the team has had a meaningful career conversation within the last six months",
+  "Every member of the team receives timely, meaningful, actionable performance feedback",
+  "Work that needs to get done aligns with work that is rewarded by the promotion process",
+  "Performance reviews never contain surprises",
+  "The team is able to give input on roadmaps and plans",
+  "The team is staffed adequately and work is evenly distributed",
+  "The team, overall, has the level of functional expertise required to do the work, and a reasonable number of stretch goals are available",
+  "Conflicts are resolved in a fair and respectful way",
+  "Diversity is represented and embraced; a broad spectrum of views are considered",
+];
+
+const managingPeerRelationships = [
+  "Key team peer relationships are identified and regularly maintained through regular healthy, productive meetings, and effective written communication",
+  "Groups dependent on team's work can trust the commitments the team makes",
+  "Key peer teams have a clear idea of how they can request work to be prioritized by your team, with transparency into what the tradeoffs are",
+  "Team is able to get work required from dependency teams prioritized with a reasonable expectation that commitments are honored",
+  "Agreements are documented in writing",
+  "Progress and set backs are reguarly communicated to key stakeholders",
+  "When collaborative projects are completed, credit is shared among the contributors",
+  "There is a clear, mutually-respectful escalation path for issues that cannot be resolved between peer managers/engineers",
+  "Managers are able to discuss issues privately in a psychologically safe manner",
+];
+
+const managingSeniorManagementRelationships = [
+  "Direct management has clear visibility into the progress of the team",
+  "Direct management/management chain is appropriately involved in issues requiring special attention",
+  "You are able to advocate for specific prioritization decisions; priorities are set with transparency",
+  "Clear agreement on goals and definition of success",
+];
+
+const managingYourself = [
+  "Your own work-life boundaries are respected",
+  "Your immediate and long-term career goals are documented in writing",
+  "You are not stagnating, even if your immediate career goals don't involve a promotion",
+  "Impact is primarily expressed in achievements of the team and the growth of the team members",
+];
+---
+
+<BaseLayout>
+  <fieldset>
+    <legend class="text-base font-semibold leading-6">Managing the team</legend>
+    <div
+      class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200"
+    >
+      {
+        managingTheTeam.map((item, index) => (
+          <div class="relative flex items-start py-4">
+            <div class="min-w-0 flex-1 leading-6">
+              <label for="item-1" class="select-none">
+                {item}
+              </label>
+            </div>
+            <div class="ml-3 flex h-6 items-center">
+              <input
+                id={"item-" + index + 1}
+                name={"item-" + index + 1}
+                type="checkbox"
+                class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600"
+              />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend class="text-base font-semibold leading-6"
+      >Managing peer relationships</legend
+    >
+    <div
+      class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200"
+    >
+      {
+        managingPeerRelationships.map((item, index) => (
+          <div class="relative flex items-start py-4">
+            <div class="min-w-0 flex-1 leading-6">
+              <label for="item-1" class="select-none">
+                {item}
+              </label>
+            </div>
+            <div class="ml-3 flex h-6 items-center">
+              <input
+                id={"item-" + index + 1}
+                name={"item-" + index + 1}
+                type="checkbox"
+                class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600"
+              />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend class="text-base font-semibold leading-6"
+      >Managing senior management relationships</legend
+    >
+    <div
+      class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200"
+    >
+      {
+        managingSeniorManagementRelationships.map((item, index) => (
+          <div class="relative flex items-start py-4">
+            <div class="min-w-0 flex-1 leading-6">
+              <label for="item-1" class="select-none">
+                {item}
+              </label>
+            </div>
+            <div class="ml-3 flex h-6 items-center">
+              <input
+                id={"item-" + index + 1}
+                name={"item-" + index + 1}
+                type="checkbox"
+                class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600"
+              />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend class="text-base font-semibold leading-6">Managing yourself</legend>
+    <div
+      class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200"
+    >
+      {
+        managingSeniorManagementRelationships.map((item, index) => (
+          <div class="relative flex items-start py-4">
+            <div class="min-w-0 flex-1 leading-6">
+              <label for="item-1" class="select-none">
+                {item}
+              </label>
+            </div>
+            <div class="ml-3 flex h-6 items-center">
+              <input
+                id={"item-" + index + 1}
+                name={"item-" + index + 1}
+                type="checkbox"
+                class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600"
+              />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </fieldset>
+</BaseLayout>
