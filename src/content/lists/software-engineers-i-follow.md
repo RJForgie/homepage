@@ -71,6 +71,8 @@ Best known for: [Teaching you MySQL](https://planetscale.com/learn/courses/mysql
 - [Publishing your work](https://www.youtube.com/watch?v=2YaEtaXYVtI) talk at Laracon US 2023
 - [Do literally anything](https://aaronfrancis.com/2024/do-literally-anything) blog post
 
+---
+
 ## Maggie Appleton ([@mappletons](https://x.com/Mappletons) / [maggieappleton.com](https://maggieappleton.com/))
 
 Best known for: [Beautiful technical illustrations and essays](https://maggieappleton.com/advancedjs)
