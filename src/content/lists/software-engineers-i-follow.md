@@ -4,7 +4,7 @@ description: ""
 pubDate: "Apr 30 2024"
 contentType: "lists"
 highlight: true
-updatedDate: "May 15 2024"
+updatedDate: "Jun 13 2024"
 ---
 
 ## Adam Wathan ([@adamwathan](https://twitter.com/adamwathan) / [adamwatham.me](https://adamwathan.me/))
@@ -70,3 +70,12 @@ Best known for: [Teaching you MySQL](https://planetscale.com/learn/courses/mysql
 - [Mostly Technical](https://mostlytechnical.com/) podcast
 - [Publishing your work](https://www.youtube.com/watch?v=2YaEtaXYVtI) talk at Laracon US 2023
 - [Do literally anything](https://aaronfrancis.com/2024/do-literally-anything) blog post
+
+## Maggie Appleton ([@mappletons](https://x.com/Mappletons) / [maggieappleton.com](https://maggieappleton.com/))
+
+Best known for: [Beautiful technical illustrations and essays](https://maggieappleton.com/advancedjs)
+
+- [The best way to set goals](https://www.youtube.com/watch?v=mRd_1Bt9qrs) video
+- [Just JavaScript](https://justjavascript.com/) course
+- [Tools for Thought as Cultural Practices, not Computational Objects](https://maggieappleton.com/tools-for-thought) essay
+- [A Picture Worth a Thousand Programmes](https://www.youtube.com/watch?v=L4SMvMfM7NI) talk at React Advanced 2021
