@@ -5,6 +5,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 <BaseLayout showHeader="true">
   <ContentList contentType="journal" />
+
+  <section class="mt-14">
+    <h2 class="text-zinc-50 font-medium mb-2 capitalize">Projects</h2>
+    <ol class="list-decimal list-inside">
+      <li class="my-2">
+        <a href="/polya/" class="underline hover:text-zinc-50">
+          Heuristics for problem solving
+        </a>
+      </li>
+    </ol>
+  </section>
   <ContentList contentType="lists" />
-  <!-- <ContentList contentType="articles" /> -->
 </BaseLayout>

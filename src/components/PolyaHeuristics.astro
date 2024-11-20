@@ -1,0 +1,123 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const heuristics = [
+    {
+        title: "Analogy",
+        description:
+            "Can you find a similar problem you've solved and adapt that solution?",
+    },
+    {
+        title: "Auxiliary Elements",
+        description:
+            "Can you add something new to your problem to make it easier to solve?",
+    },
+    {
+        title: "Generalization",
+        description:
+            "Can you find a broader version of your problem that might be easier to understand?",
+    },
+    {
+        title: "Induction",
+        description:
+            "Can you solve a few simple examples and find the pattern that leads to a general solution?",
+    },
+    {
+        title: "Variation of the Problem",
+        description:
+            "Can you change the problem slightly to create a new problem that might be easier to solve?",
+    },
+    {
+        title: "Auxiliary Problem",
+        description:
+            "Can you find a smaller part of your problem that, once solved, will help solve the whole?",
+    },
+    {
+        title: "Related Solutions",
+        description:
+            "Can you find an existing solution to a similar problem and adapt it to yours?",
+    },
+    {
+        title: "Specialization",
+        description:
+            "Can you solve a more specific version of your problem first?",
+    },
+    {
+        title: "Decomposing and Recombining",
+        description:
+            "Can you break the problem into parts and put them back together in a new way?",
+    },
+    {
+        title: "Working Backward",
+        description:
+            "Can you start from your desired end result and work backwards to what you know?",
+    },
+    {
+        title: "Draw a Figure",
+        description:
+            "Can you sketch or diagram the problem to see it more clearly?",
+    },
+];
+---
+
+<BaseLayout>
+    <div class="mt-14 mx-auto max-w-screen-sm">
+        <h1 class="text-zinc-50 text-5xl mb-2 font-light">Pólya Heuristics</h1>
+        <p>
+            In his book <a
+                href="https://en.wikipedia.org/wiki/How_to_Solve_It"
+                class="underline hover:text-zinc-50"
+                target="_blank"
+            >
+                How to Solve It</a
+            > the mathematician George Pólya describes a list of heuristics for problem
+            solving. Published in 1945, these heuristics are still as relevant today.
+        </p>
+
+        <div class="mt-14 mb-14">
+            <div class="border border-zinc-700 rounded-lg p-6 mb-8">
+                <h2
+                    id="heuristic-title"
+                    class="text-3xl font-light mb-6 text-zinc-50"
+                >
+                    {heuristics[0].title}
+                </h2>
+
+                <div class="mb-8 min-h-[80px]">
+                    <p
+                        id="heuristic-description"
+                        class="text-zinc-300 text-lg font-light"
+                    >
+                        {heuristics[0].description}
+                    </p>
+                </div>
+            </div>
+
+            <button
+                id="next-button"
+                class="px-4 py-2 border border-zinc-700 rounded-md text-zinc-300 hover:text-zinc-50 hover:border-zinc-600 transition-colors"
+            >
+                Next Heuristic
+            </button>
+        </div>
+    </div>
+
+    <script define:vars={{ heuristics }}>
+        let currentIndex = 0;
+
+        const titleElement = document.getElementById("heuristic-title");
+        const descriptionElement = document.getElementById(
+            "heuristic-description",
+        );
+        const nextButton = document.getElementById("next-button");
+
+        function showNextHeuristic() {
+            currentIndex = (currentIndex + 1) % heuristics.length;
+            titleElement.textContent = heuristics[currentIndex].title;
+            descriptionElement.textContent =
+                heuristics[currentIndex].description;
+        }
+
+        nextButton.addEventListener("click", showNextHeuristic);
+    </script>
+</BaseLayout>
