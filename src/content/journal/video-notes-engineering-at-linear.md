@@ -10,17 +10,17 @@ highlight: true
 
 ***
 
-# Notes
+# Notes from Sabin Roman's conversation
 
-## Promotions vs growth
+## On promotions vs growth
 
-Promotions, titles and rubrics can become a goal in themselves and can steal focus from what you are building. Instead, growth can be approached as a cycle of continuous challenge and learning during the course the daily work of scaling a product.
+Sabin suggests that promotions, titles and rubrics can become a goal in themselves and can steal focus from what you are building. Instead, he advocates approaching growth as a cycle of continuous challenge and learning during the course of daily work scaling a product.
 
-## Measuring your performance as an engineering manager
-Ask yourself: "What have I done to make the product better?" - *A question that makes you think about your impact outside of the usual metrics around team health and output.*
+## On measuring performance as an engineering manager
+Sabin recommends asking yourself: "What have I done to make the product better?" - *A question that pushes you to think about impact beyond the usual metrics around team health and output.*
 
-## Creativity vs process
-For as long as your scale allows, prioritise creativity over process. In practice, this means discussing principles rather than writing detailed guidebooks. While guidebooks have their place in structured processes like incident response, they can stifle creativity in day-to-day work.
+## On creativity vs process
+In Sabin's view, for as long as your scale allows, teams should prioritize creativity over process. In practice, this means discussing principles rather than writing detailed guidebooks. While he acknowledges guidebooks have their place in structured processes like incident response, he believes they can stifle creativity in day-to-day work.
 
 
 
