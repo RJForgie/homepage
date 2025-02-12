@@ -2,21 +2,21 @@
 import { getCollection } from "astro:content";
 
 interface Props {
-  contentType: "articles" | "lists" | "journal";
+  contentType: "lists" | "journal";
 }
 
 const { contentType } = Astro.props;
 
-const posts = (await getCollection(contentType)).sort(
+const posts = await getCollection(contentType, ({ data }) => {
+  return data.contentType === contentType;
+});
+
+const sortedPosts = posts.sort(
   (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
 );
-const matchedContent = posts.filter(
-  (post) => post.data.contentType === contentType
-);
-const highlights = matchedContent.filter(
-  (highlight) => highlight.data.highlight
-);
-const nonHighlightPosts = matchedContent.filter((highlight) => !highlight.data.highlight);
+
+const highlights = sortedPosts.filter((post) => post.data.highlight);
+const nonHighlightPosts = sortedPosts.filter((post) => !post.data.highlight);
 ---
 
 <section class="mt-14">
