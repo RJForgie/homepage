@@ -12,7 +12,7 @@ const posts = await getCollection(contentType, ({ data }) => {
 });
 
 const sortedPosts = posts.sort(
-  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf(),
 );
 
 const highlights = sortedPosts.filter((post) => post.data.highlight);
