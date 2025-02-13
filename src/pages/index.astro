@@ -1,19 +1,15 @@
 ---
 import ContentList from "../components/ContentList.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Project from "../components/Project.astro";
 ---
 
 <BaseLayout showHeader="true">
   <ContentList contentType="journal" />
-
   <section class="mt-14">
     <h2 class="text-zinc-50 font-medium mb-2 capitalize">Projects</h2>
     <ol class="list-decimal list-inside">
-      <li class="my-2">
-        <a href="/projects/polya/" class="underline hover:text-zinc-50">
-          Heuristics for problem solving
-        </a>
-      </li>
+      <Project link="/projects/polya/" title="Heuristics for problem solving" />
     </ol>
   </section>
   <ContentList contentType="lists" />
