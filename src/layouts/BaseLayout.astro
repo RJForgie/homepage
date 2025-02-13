@@ -1,6 +1,13 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+interface Props {
+  title?: string;
+  description?: string;
+  showHeader?: boolean;
+}
+
 const {
   title = SITE_TITLE,
   description = SITE_DESCRIPTION,
