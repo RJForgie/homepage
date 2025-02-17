@@ -1,0 +1,35 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import Post from "@layouts/Post.astro";
+
+const collections = ["journal", "links", "lists"] as const;
+type ValidCollection = (typeof collections)[number];
+
+export async function getStaticPaths() {
+  const allPaths = await Promise.all(
+    collections.map(async (collection) => {
+      const entries = await getCollection(collection);
+      return entries.map((entry) => ({
+        params: {
+          collection,
+          slug: entry.slug,
+        },
+        props: { entry },
+      }));
+    }),
+  );
+
+  return allPaths.flat();
+}
+
+type Props = {
+  entry: CollectionEntry<ValidCollection>;
+};
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<Post {...entry.data}>
+  <Content />
+</Post>
