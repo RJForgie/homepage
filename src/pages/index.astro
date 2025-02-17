@@ -5,12 +5,13 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 ---
 
 <BaseLayout showHeader={true}>
-  <ContentList contentType="journal" />
   <section class="mt-14">
     <h2 class="text-zinc-50 font-medium mb-2 capitalize">Projects</h2>
     <ol class="list-decimal list-inside">
       <Project link="/projects/polya/" title="Heuristics for problem solving" />
     </ol>
   </section>
+  <ContentList contentType="journal" />
+  <ContentList contentType="links" />
   <ContentList contentType="lists" />
 </BaseLayout>

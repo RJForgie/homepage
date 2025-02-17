@@ -18,4 +18,8 @@ export const collections = {
     type: 'content',
     schema: commonSchema 
   }),
+  links: defineCollection({ 
+    type: 'content',
+    schema: commonSchema 
+  }),
 };
