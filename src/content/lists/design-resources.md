@@ -2,7 +2,6 @@
 title: "Design resources even an engineer can follow"
 description: ""
 pubDate: "May 6 2024"
-highlight: true
 ---
 
 - [How to improve your visual design](https://anthonyhobday.com/books/visualdesign/) - Antony Hobday

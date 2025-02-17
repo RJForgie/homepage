@@ -2,7 +2,6 @@
 title: "Software engineers I follow"
 description: ""
 pubDate: "Apr 30 2024"
-highlight: true
 updatedDate: "Jun 13 2024"
 ---
 

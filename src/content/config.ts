@@ -5,7 +5,6 @@ const commonSchema = () => z.object({
   description: z.string(),
   pubDate: z.coerce.date(),
   updatedDate: z.coerce.date().optional(),
-  highlight: z.boolean().optional(),
 });
 
 export const collections = {

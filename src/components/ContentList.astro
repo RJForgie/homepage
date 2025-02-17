@@ -13,30 +13,30 @@ const sortedPosts = posts.sort(
   (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf(),
 );
 
-const highlights = sortedPosts.filter((post) => post.data.highlight);
-const nonHighlightPosts = sortedPosts.filter((post) => !post.data.highlight);
+const firstThreePosts = sortedPosts.slice(0, 3);
+const remainingPosts = sortedPosts.slice(3);
 ---
 
 <section class="mt-14">
   <h2 class="text-zinc-50 font-medium mb-2 capitalize">{collection}</h2>
   <ol class="list-decimal list-inside">
     {
-      highlights.map((highlight) => (
+      firstThreePosts.map((post) => (
         <li class="my-2">
           <a
-            href={`/${collection}/${highlight.slug}/`}
+            href={`/${collection}/${post.slug}/`}
             class="underline hover:text-zinc-50"
           >
-            {highlight.data.title}
+            {post.data.title}
           </a>
         </li>
       ))
     }
     {
-      nonHighlightPosts.length > 0 && (
+      remainingPosts.length > 0 && (
         <details>
           <summary>More</summary>
-          {nonHighlightPosts.map((post) => (
+          {remainingPosts.map((post) => (
             <li class="my-2">
               <a
                 href={`/${collection}/${post.slug}/`}

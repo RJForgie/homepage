@@ -2,7 +2,6 @@
 title: 'WHOIS Privacy in Cloudflare'
 description: 'Verifying your personal details are not exposed'
 pubDate: 'November 21 2024'
-highlight: true
 ---
 
 Before setting up [my domain as my Bluesky handle](https://bsky.social/about/blog/4-28-2023-domain-handle-tutorial), I wanted to verify my personal information wasn't publicly exposed through WHOIS records.

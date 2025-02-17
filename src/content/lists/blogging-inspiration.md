@@ -2,7 +2,6 @@
 title: "Blogging inspiration"
 description: ""
 pubDate: "May 5 2024"
-highlight: true
 ---
 
 - [What if you tried hard](https://aaronfrancis.com/2024/try-hard) - Aaron Francis
