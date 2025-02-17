@@ -2,7 +2,6 @@
 title: 'WHOIS Privacy in Cloudflare'
 description: 'Verifying your personal details are not exposed'
 pubDate: 'November 21 2024'
-contentType: 'journal'
 highlight: true
 ---
 

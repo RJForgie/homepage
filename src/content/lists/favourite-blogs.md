@@ -2,7 +2,6 @@
 title: "Personal tech blogs I enjoy reading"
 description: ""
 pubDate: "May 16 2024"
-contentType: "lists"
 ---
 
 - [Ben Kuhn](https://www.benkuhn.net/)

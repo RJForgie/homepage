@@ -2,7 +2,6 @@
 title: "Blogging inspiration"
 description: ""
 pubDate: "May 5 2024"
-contentType: "lists"
 highlight: true
 ---
 

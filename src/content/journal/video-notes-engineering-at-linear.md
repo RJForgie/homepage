@@ -2,7 +2,6 @@
 title: 'Video Notes: Engineering at Linear'
 description: 'An interview between Sabin Roman from the Pragmatic Engineeer Podcast'
 pubDate: 'November 26 2024'
-contentType: 'journal'
 highlight: true
 ---
 

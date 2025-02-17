@@ -2,7 +2,6 @@
 title: 'Cloudflare Pages custom domains'
 description: 'Redirecting to apex domains'
 pubDate: 'April 30 2024'
-contentType: 'journal'
 highlight: true
 ---
 
