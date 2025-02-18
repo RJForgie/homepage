@@ -24,7 +24,9 @@ const { title, description, pubDate, updatedDate } = Astro.props;
         }
       </div>
     </div>
-    <div class="prose, prose-invert prose-lg mt-14">
+    <div
+      class="prose-invert prose-lg prose-h2:text-lg prose-h2:font-bold prose-a:underline prose-ol:list-decimal prose-ul:list-disc mt-14"
+    >
       <slot />
     </div>
   </article>

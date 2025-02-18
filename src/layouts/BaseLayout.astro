@@ -1,6 +1,7 @@
 ---
 import BaseHead from "@components/BaseHead.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import "../styles/global.css";
 
 interface Props {
   title?: string;
@@ -23,7 +24,7 @@ const today = new Date();
     <BaseHead title={title} description={description} />
   </head>
   <body
-    class="mt-14 mx-auto px-6 max-w-screen-sm bg-zinc-900 text-zinc-300 text-lg font-light"
+    class="mt-14 mx-auto px-6 max-w-(--breakpoint-sm) bg-zinc-900 text-zinc-300 text-lg font-light"
   >
     {
       showHeader && (
