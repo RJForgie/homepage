@@ -18,7 +18,9 @@ const remainingPosts = sortedPosts.slice(3);
 ---
 
 <section class="mt-14">
-  <h2 class="text-zinc-50 font-medium mb-2 capitalize">{collection}</h2>
+  <h2 class="text-zinc-50 font-medium mb-2">
+    {collection.charAt(0).toUpperCase() + collection.slice(1)}
+  </h2>
   <ol class="list-decimal list-inside">
     {
       firstThreePosts.map((post) => (
