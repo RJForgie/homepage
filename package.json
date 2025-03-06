@@ -10,7 +10,8 @@
     "astro": "astro",
     "lint": "eslint \"src/**/*.{js,ts,astro}\"",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "preinstall": "npx only-allow pnpm"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,astro}": [
