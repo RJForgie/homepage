@@ -1,6 +1,5 @@
 {
   "name": "homepage",
-  "packageManager": "pnpm@10.5.2",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -11,7 +10,7 @@
     "astro": "astro",
     "lint": "eslint \"src/**/*.{js,ts,astro}\"",
     "format": "prettier --write .",
-    "prepare": "pnpm husky"
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,astro}": [
