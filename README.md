@@ -19,7 +19,7 @@ Personal website and blog built using [Astro](https://astro.build/).
 
 ## Commands
 
-All commands are run from the root of the project:
+All commands are run from root of the project:
 
 | Command                    | Action                                           |
 | :------------------------- | :----------------------------------------------- |
