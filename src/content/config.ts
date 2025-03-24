@@ -12,7 +12,7 @@ export const collections = {
   lists: defineCollection({
     schema: commonSchema,
   }),
-  journal: defineCollection({
+  notes: defineCollection({
     schema: commonSchema,
   }),
   links: defineCollection({
