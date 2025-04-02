@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import FormattedDate from "./FormattedDate.astro";
 
 interface Props {
   collection: "lists" | "notes" | "links";
@@ -10,7 +11,7 @@ const { collection } = Astro.props;
 const posts = await getCollection(collection);
 
 const sortedPosts = posts.sort(
-  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf(),
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
 const firstThreePosts = sortedPosts.slice(0, 3);
@@ -21,10 +22,13 @@ const remainingPosts = sortedPosts.slice(3);
   <h2 class="text-zinc-50 font-medium mb-2">
     {collection.charAt(0).toUpperCase() + collection.slice(1)}
   </h2>
-  <ol class="list-decimal list-inside">
+  <ul>
     {
       firstThreePosts.map((post) => (
-        <li class="my-2">
+        <li class="my-2 flex items-baseline">
+          <span class="text-sm text-zinc-400 w-24 shrink-0">
+            <FormattedDate date={post.data.pubDate} />
+          </span>
           <a
             href={`/${collection}/${post.slug}/`}
             class="underline hover:text-zinc-50"
@@ -38,18 +42,23 @@ const remainingPosts = sortedPosts.slice(3);
       remainingPosts.length > 0 && (
         <details>
           <summary>More</summary>
-          {remainingPosts.map((post) => (
-            <li class="my-2">
-              <a
-                href={`/${collection}/${post.slug}/`}
-                class="underline hover:text-zinc-50"
-              >
-                {post.data.title}
-              </a>
-            </li>
-          ))}
+          <ul>
+            {remainingPosts.map((post) => (
+              <li class="my-2 flex items-baseline">
+                <span class="text-sm text-zinc-400 w-24 shrink-0">
+                  <FormattedDate date={post.data.pubDate} />
+                </span>
+                <a
+                  href={`/${collection}/${post.slug}/`}
+                  class="underline hover:text-zinc-50"
+                >
+                  {post.data.title}
+                </a>
+              </li>
+            ))}
+          </ul>
         </details>
       )
     }
-  </ol>
+  </ul>
 </section>
