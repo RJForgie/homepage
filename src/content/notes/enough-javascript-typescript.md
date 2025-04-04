@@ -1,6 +1,6 @@
 ---
 title: "Enough JavaScript and TypeScript to get things done"
-description: "Enough to be dangerous"
+description: "A guide"
 pubDate: "April 3 2025"
 ---
 
