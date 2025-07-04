@@ -13,7 +13,7 @@ const { title, description, pubDate, updatedDate } = Astro.props;
   <article>
     <div>
       <h1 class="text-zinc-50 text-5xl mb-2 font-light">{title}</h1>
-      <div class="text-sm text-zinc-400">
+      <div class="text-sm text-zinc-400 mt-4">
         <FormattedDate date={pubDate} />
         {
           updatedDate && (
