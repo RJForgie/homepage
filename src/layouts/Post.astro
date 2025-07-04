@@ -20,16 +20,21 @@ const modifiedTime = updatedDate ? updatedDate.toISOString() : publishedTime;
   publishedTime={publishedTime}
   modifiedTime={modifiedTime}
 >
-  <article>
-    <div>
-      <h1 class="text-zinc-50 text-5xl mb-2 font-light">{title}</h1>
+  <article itemscope itemtype="https://schema.org/Article">
+    <header>
+      <h1 class="text-zinc-50 text-5xl mb-2 font-light" itemprop="headline">
+        {title}
+      </h1>
       <ArticleMeta pubDate={pubDate} updatedDate={updatedDate} />
-    </div>
+    </header>
     <div
       class="prose-invert prose-lg prose-h2:text-lg prose-h2:font-bold prose-a:underline prose-ol:list-decimal prose-ul:list-disc mt-14"
+      itemprop="articleBody"
     >
       <slot />
     </div>
   </article>
-  <BackLink />
+  <nav aria-label="Article navigation">
+    <BackLink />
+  </nav>
 </BaseLayout>

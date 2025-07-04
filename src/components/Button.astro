@@ -4,6 +4,8 @@ interface Props {
   size?: "sm" | "md" | "lg";
   class?: string;
   id?: string;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
 const {
@@ -11,13 +13,17 @@ const {
   size = "md",
   class: className = "",
   id,
+  disabled = false,
+  type = "button",
 } = Astro.props;
 
-const baseClasses = "border rounded-md transition-colors";
+const baseClasses =
+  "border rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 focus:ring-offset-zinc-900";
 const variantClasses = {
-  primary: "bg-zinc-700 border-zinc-600 text-zinc-50 hover:bg-zinc-600",
+  primary:
+    "bg-zinc-700 border-zinc-600 text-zinc-50 hover:bg-zinc-600 disabled:opacity-50 disabled:cursor-not-allowed",
   secondary:
-    "border-zinc-700 text-zinc-300 hover:text-zinc-50 hover:border-zinc-600",
+    "border-zinc-700 text-zinc-300 hover:text-zinc-50 hover:border-zinc-600 disabled:opacity-50 disabled:cursor-not-allowed",
 };
 const sizeClasses = {
   sm: "px-3 py-1 text-sm",
@@ -28,6 +34,6 @@ const sizeClasses = {
 const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
 ---
 
-<button class={classes} id={id}>
+<button class={classes} id={id} disabled={disabled} type={type}>
   <slot />
 </button>

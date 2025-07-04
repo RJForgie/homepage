@@ -4,13 +4,15 @@ import { AUTHOR } from "@consts";
 import Link from "@components/Link.astro";
 ---
 
-<header>
+<header role="banner" aria-label="Site header">
   <h1 class="text-zinc-50 text-5xl mb-6">{AUTHOR.name}</h1>
   <div class="flex items-start gap-6">
     <img
       src="/images/profile.jpg"
-      alt={AUTHOR.name}
+      alt={`${AUTHOR.name}`}
       class="hidden md:block w-32 h-32 rounded-lg object-cover flex-shrink-0"
+      width="128"
+      height="128"
     />
     <div>
       <p>
@@ -18,7 +20,13 @@ import Link from "@components/Link.astro";
       </p>
       <p class="mt-4">
         Find me on{" "}
-        <Link href={AUTHOR.linkedin} external> LinkedIn </Link>
+        <Link
+          href={AUTHOR.linkedin}
+          external
+          aria-label={`Visit ${AUTHOR.name}'s LinkedIn profile`}
+        >
+          LinkedIn
+        </Link>
         .
       </p>
     </div>

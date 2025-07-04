@@ -43,16 +43,36 @@ const today = new Date();
   <body
     class="mt-14 mx-auto px-6 max-w-(--breakpoint-sm) bg-zinc-900 text-zinc-300 text-lg font-light"
   >
+    <!-- Skip to main content link for screen readers -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-zinc-800 text-zinc-50 px-4 py-2 rounded z-50"
+    >
+      Skip to main content
+    </a>
+
     <slot name="header" />
-    <main>
+
+    <main id="main-content" tabindex="-1">
       <slot />
     </main>
-    <footer class="my-14">
-      <div>
-        <Link href={AUTHOR.linkedin} external> LinkedIn </Link>
-      </div>
-      &copy; {today.getFullYear()}
-      {AUTHOR.name}. All rights reserved.
+
+    <footer class="my-14" role="contentinfo" aria-label="Site footer">
+      <nav aria-label="Social links">
+        <div>
+          <Link
+            href={AUTHOR.linkedin}
+            external
+            aria-label={`Visit ${AUTHOR.name}'s LinkedIn profile`}
+          >
+            LinkedIn
+          </Link>
+        </div>
+      </nav>
+      <p class="mt-2">
+        &copy; {today.getFullYear()}
+        {AUTHOR.name}. All rights reserved.
+      </p>
     </footer>
   </body>
 </html>

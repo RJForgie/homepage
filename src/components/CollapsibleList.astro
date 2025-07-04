@@ -8,7 +8,9 @@ const { title, class: className = "" } = Astro.props;
 ---
 
 <details class={className}>
-  <summary class="cursor-pointer hover:text-zinc-50 transition-colors">
+  <summary
+    class="cursor-pointer hover:text-zinc-50 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500 rounded"
+  >
     {title}
   </summary>
   <div class="mt-2">

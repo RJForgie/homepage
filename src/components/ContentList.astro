@@ -25,38 +25,46 @@ const collectionTitle =
     : collection.charAt(0).toUpperCase() + collection.slice(1);
 ---
 
-<section class="mt-14">
-  <h2 class="text-zinc-50 font-medium mb-2">
+<section class="mt-14" aria-labelledby={`${collection}-heading`}>
+  <h2 id={`${collection}-heading`} class="text-zinc-50 font-medium mb-2">
     {collectionTitle}
   </h2>
-  <ul>
-    {
-      firstThreePosts.map((post) => (
-        <li class="my-2 flex items-baseline">
-          <span class="text-sm text-zinc-400 w-24 shrink-0">
-            <FormattedDate date={post.data.pubDate} />
-          </span>
-          <Link href={`/${collection}/${post.slug}/`}>{post.data.title}</Link>
-        </li>
-      ))
-    }
-    {
-      remainingPosts.length > 0 && (
-        <CollapsibleList title="More">
-          <ul>
-            {remainingPosts.map((post) => (
-              <li class="my-2 flex items-baseline">
-                <span class="text-sm text-zinc-400 w-24 shrink-0">
-                  <FormattedDate date={post.data.pubDate} />
-                </span>
-                <Link href={`/${collection}/${post.slug}/`}>
-                  {post.data.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </CollapsibleList>
-      )
-    }
-  </ul>
+  <nav aria-label={`${collectionTitle} articles`}>
+    <ul>
+      {
+        firstThreePosts.map((post) => (
+          <li class="my-2 flex items-baseline">
+            <time
+              datetime={post.data.pubDate.toISOString()}
+              class="text-sm text-zinc-400 w-24 shrink-0"
+            >
+              <FormattedDate date={post.data.pubDate} />
+            </time>
+            <Link href={`/${collection}/${post.slug}/`}>{post.data.title}</Link>
+          </li>
+        ))
+      }
+      {
+        remainingPosts.length > 0 && (
+          <CollapsibleList title={`More (${remainingPosts.length})`}>
+            <ul>
+              {remainingPosts.map((post) => (
+                <li class="my-2 flex items-baseline">
+                  <time
+                    datetime={post.data.pubDate.toISOString()}
+                    class="text-sm text-zinc-400 w-24 shrink-0"
+                  >
+                    <FormattedDate date={post.data.pubDate} />
+                  </time>
+                  <Link href={`/${collection}/${post.slug}/`}>
+                    {post.data.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </CollapsibleList>
+        )
+      }
+    </ul>
+  </nav>
 </section>

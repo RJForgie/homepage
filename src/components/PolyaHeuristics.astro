@@ -75,7 +75,7 @@ const heuristics = [
       solving. Published in 1945, these heuristics are still as relevant today.
     </p>
 
-    <div class="mt-14 mb-14">
+    <section class="mt-14 mb-14" aria-labelledby="heuristic-title">
       <Card class="mb-8">
         <h2 id="heuristic-title" class="text-3xl font-light mb-6 text-zinc-50">
           {heuristics[0].title}
@@ -85,14 +85,22 @@ const heuristics = [
           <p
             id="heuristic-description"
             class="text-zinc-300 text-lg font-light"
+            aria-live="polite"
           >
             {heuristics[0].description}
           </p>
         </div>
       </Card>
 
-      <Button id="next-button"> Next Heuristic </Button>
-    </div>
+      <div class="flex items-center gap-4">
+        <Button id="next-button" aria-label="Show next heuristic">
+          Next Heuristic
+        </Button>
+        <span class="text-sm text-zinc-400" aria-live="polite">
+          <span id="heuristic-counter">1</span> of {heuristics.length}
+        </span>
+      </div>
+    </section>
   </div>
 
   <script is:inline define:vars={{ heuristics }}>
@@ -101,12 +109,33 @@ const heuristics = [
     const titleElement = document.getElementById("heuristic-title");
     const descriptionElement = document.getElementById("heuristic-description");
     const nextButton = document.getElementById("next-button");
+    const counterElement = document.getElementById("heuristic-counter");
 
     function showNextHeuristic() {
       currentIndex = (currentIndex + 1) % heuristics.length;
       titleElement.textContent = heuristics[currentIndex].title;
       descriptionElement.textContent = heuristics[currentIndex].description;
+      counterElement.textContent = currentIndex + 1;
     }
+
+    function showPreviousHeuristic() {
+      currentIndex =
+        currentIndex === 0 ? heuristics.length - 1 : currentIndex - 1;
+      titleElement.textContent = heuristics[currentIndex].title;
+      descriptionElement.textContent = heuristics[currentIndex].description;
+      counterElement.textContent = currentIndex + 1;
+    }
+
+    // Keyboard navigation
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === " ") {
+        event.preventDefault();
+        showNextHeuristic();
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        showPreviousHeuristic();
+      }
+    });
 
     nextButton.addEventListener("click", showNextHeuristic);
   </script>
