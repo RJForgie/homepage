@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import FormattedDate from "./FormattedDate.astro";
 
 interface Props {
-  collection: "lists" | "notes" | "links";
+  collection: "lists" | "field-notes";
 }
 
 const { collection } = Astro.props;
@@ -20,7 +20,11 @@ const remainingPosts = sortedPosts.slice(3);
 
 <section class="mt-14">
   <h2 class="text-zinc-50 font-medium mb-2">
-    {collection.charAt(0).toUpperCase() + collection.slice(1)}
+    {
+      collection === "field-notes"
+        ? "Field Notes"
+        : collection.charAt(0).toUpperCase() + collection.slice(1)
+    }
   </h2>
   <ul>
     {

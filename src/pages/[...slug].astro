@@ -3,10 +3,10 @@ import { type CollectionEntry, getCollection } from "astro:content";
 import Post from "@layouts/Post.astro";
 
 // Define the type outside since it's needed for Props
-type ValidCollection = "notes" | "links" | "lists";
+type ValidCollection = "field-notes" | "lists";
 
 export async function getStaticPaths() {
-  const collections = ["notes", "links", "lists"] as const;
+  const collections = ["field-notes", "lists"] as const;
 
   const allPaths = await Promise.all(
     collections.map(async (collection) => {
