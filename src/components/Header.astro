@@ -1,0 +1,30 @@
+---
+import { AUTHOR } from "@consts";
+---
+
+<header>
+  <h1 class="text-zinc-50 text-5xl mb-6">{AUTHOR.name}</h1>
+  <div class="flex items-start gap-6">
+    <img
+      src="/images/profile.jpg"
+      alt={AUTHOR.name}
+      class="hidden md:block w-32 h-32 rounded-lg object-cover flex-shrink-0"
+    />
+    <div>
+      <p>
+        {AUTHOR.bio}
+      </p>
+      <p class="mt-4">
+        Find me on{" "}
+        <a
+          href={AUTHOR.linkedin}
+          class="underline hover:text-zinc-50"
+          target="_blank"
+        >
+          LinkedIn
+        </a>
+        .
+      </p>
+    </div>
+  </div>
+</header>

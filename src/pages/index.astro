@@ -1,10 +1,12 @@
 ---
 import ContentList from "@components/ContentList.astro";
 import Project from "@components/Project.astro";
+import Header from "@components/Header.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 ---
 
-<BaseLayout showHeader={true}>
+<BaseLayout>
+  <Header slot="header" />
   <ContentList collection="field-notes" />
   <ContentList collection="lists" />
   <section class="mt-14">

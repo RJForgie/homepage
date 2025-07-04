@@ -1,19 +1,14 @@
 ---
 import BaseHead from "@components/BaseHead.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "@consts";
+import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from "@consts";
 import "../styles/global.css";
 
 interface Props {
   title?: string;
   description?: string;
-  showHeader?: boolean;
 }
 
-const {
-  title = SITE_TITLE,
-  description = SITE_DESCRIPTION,
-  showHeader = false,
-} = Astro.props;
+const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 
 const today = new Date();
 ---
@@ -32,50 +27,21 @@ const today = new Date();
   <body
     class="mt-14 mx-auto px-6 max-w-(--breakpoint-sm) bg-zinc-900 text-zinc-300 text-lg font-light"
   >
-    {
-      showHeader && (
-        <header>
-          <h1 class="text-zinc-50 text-5xl mb-6 ">Ryan Forgie</h1>
-          <div class="flex items-start gap-6">
-            <img
-              src="/images/profile.jpg"
-              alt="Ryan Forgie"
-              class="hidden md:block w-32 h-32 rounded-lg object-cover flex-shrink-0"
-            />
-            <div>
-              <p>
-                I build software products and lead teams. Scottish full-stack
-                software engineer and engineering manager living in New Zealand.
-              </p>
-              <p class="mt-4">
-                Find me on{" "}
-                <a
-                  href="https://www.linkedin.com/in/ryan-forgie/"
-                  class="underline hover:text-zinc-50"
-                  target="_blank"
-                >
-                  LinkedIn
-                </a>
-                .
-              </p>
-            </div>
-          </div>
-        </header>
-      )
-    }
+    <slot name="header" />
     <main>
       <slot />
     </main>
     <footer class="my-14">
       <div>
         <a
-          href="https://www.linkedin.com/in/ryan-forgie/"
+          href={AUTHOR.linkedin}
           target="_blank"
           class="underline hover:text-zinc-50"
           >LinkedIn
         </a>
       </div>
-      &copy; {today.getFullYear()} Ryan Forgie. All rights reserved.
+      &copy; {today.getFullYear()}
+      {AUTHOR.name}. All rights reserved.
     </footer>
   </body>
 </html>
