@@ -1,5 +1,8 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
+import Button from "@components/Button.astro";
+import Card from "@components/Card.astro";
+import Link from "@components/Link.astro";
 
 const heuristics = [
   {
@@ -63,18 +66,17 @@ const heuristics = [
   <div class="mt-14 mx-auto max-w-(--breakpoint-sm)">
     <h1 class="text-zinc-50 text-5xl mb-2 font-light">Pólya Heuristics</h1>
     <p>
-      In his book <a
+      In his book <Link
         href="https://en.wikipedia.org/wiki/How_to_Solve_It"
-        class="underline hover:text-zinc-50"
-        target="_blank"
+        external
       >
-        How to Solve It</a
+        How to Solve It</Link
       > the mathematician George Pólya describes a list of heuristics for problem
       solving. Published in 1945, these heuristics are still as relevant today.
     </p>
 
     <div class="mt-14 mb-14">
-      <div class="border border-zinc-700 rounded-lg p-6 mb-8">
+      <Card class="mb-8">
         <h2 id="heuristic-title" class="text-3xl font-light mb-6 text-zinc-50">
           {heuristics[0].title}
         </h2>
@@ -87,14 +89,9 @@ const heuristics = [
             {heuristics[0].description}
           </p>
         </div>
-      </div>
+      </Card>
 
-      <button
-        id="next-button"
-        class="px-4 py-2 border border-zinc-700 rounded-md text-zinc-300 hover:text-zinc-50 hover:border-zinc-600 transition-colors"
-      >
-        Next Heuristic
-      </button>
+      <Button id="next-button"> Next Heuristic </Button>
     </div>
   </div>
 

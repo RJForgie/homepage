@@ -1,6 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 import FormattedDate from "./FormattedDate.astro";
+import Link from "./Link.astro";
+import CollapsibleList from "./CollapsibleList.astro";
 
 interface Props {
   collection: "lists" | "field-notes";
@@ -16,15 +18,16 @@ const sortedPosts = posts.sort(
 
 const firstThreePosts = sortedPosts.slice(0, 3);
 const remainingPosts = sortedPosts.slice(3);
+
+const collectionTitle =
+  collection === "field-notes"
+    ? "Field Notes"
+    : collection.charAt(0).toUpperCase() + collection.slice(1);
 ---
 
 <section class="mt-14">
   <h2 class="text-zinc-50 font-medium mb-2">
-    {
-      collection === "field-notes"
-        ? "Field Notes"
-        : collection.charAt(0).toUpperCase() + collection.slice(1)
-    }
+    {collectionTitle}
   </h2>
   <ul>
     {
@@ -33,35 +36,26 @@ const remainingPosts = sortedPosts.slice(3);
           <span class="text-sm text-zinc-400 w-24 shrink-0">
             <FormattedDate date={post.data.pubDate} />
           </span>
-          <a
-            href={`/${collection}/${post.slug}/`}
-            class="underline hover:text-zinc-50"
-          >
-            {post.data.title}
-          </a>
+          <Link href={`/${collection}/${post.slug}/`}>{post.data.title}</Link>
         </li>
       ))
     }
     {
       remainingPosts.length > 0 && (
-        <details>
-          <summary>More</summary>
+        <CollapsibleList title="More">
           <ul>
             {remainingPosts.map((post) => (
               <li class="my-2 flex items-baseline">
                 <span class="text-sm text-zinc-400 w-24 shrink-0">
                   <FormattedDate date={post.data.pubDate} />
                 </span>
-                <a
-                  href={`/${collection}/${post.slug}/`}
-                  class="underline hover:text-zinc-50"
-                >
+                <Link href={`/${collection}/${post.slug}/`}>
                   {post.data.title}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
-        </details>
+        </CollapsibleList>
       )
     }
   </ul>

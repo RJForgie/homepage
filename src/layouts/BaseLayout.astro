@@ -1,14 +1,26 @@
 ---
 import BaseHead from "@components/BaseHead.astro";
 import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from "@consts";
+import Link from "@components/Link.astro";
 import "../styles/global.css";
 
 interface Props {
   title?: string;
   description?: string;
+  type?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
 }
 
-const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
+const {
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
+  type = "website",
+  publishedTime,
+  modifiedTime,
+  author,
+} = Astro.props;
 
 const today = new Date();
 ---
@@ -20,6 +32,10 @@ const today = new Date();
       title={title}
       description={description}
       image="/images/social-share.png"
+      type={type}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+      author={author}
     />
     <script is:inline defer src="https://assets.onedollarstats.com/stonks.js"
     ></script>
@@ -33,12 +49,7 @@ const today = new Date();
     </main>
     <footer class="my-14">
       <div>
-        <a
-          href={AUTHOR.linkedin}
-          target="_blank"
-          class="underline hover:text-zinc-50"
-          >LinkedIn
-        </a>
+        <Link href={AUTHOR.linkedin} external> LinkedIn </Link>
       </div>
       &copy; {today.getFullYear()}
       {AUTHOR.name}. All rights reserved.

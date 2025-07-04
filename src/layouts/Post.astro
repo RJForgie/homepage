@@ -1,28 +1,29 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import type { CollectionEntry } from "astro:content";
-import FormattedDate from "@components/FormattedDate.astro";
+import ArticleMeta from "@components/ArticleMeta.astro";
 import BackLink from "@components/BackLink.astro";
 
 type Props = CollectionEntry<"field-notes" | "lists">["data"];
 
 const { title, description, pubDate, updatedDate } = Astro.props;
+
+// Format dates for meta tags
+const publishedTime = pubDate.toISOString();
+const modifiedTime = updatedDate ? updatedDate.toISOString() : publishedTime;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout
+  title={title}
+  description={description}
+  type="article"
+  publishedTime={publishedTime}
+  modifiedTime={modifiedTime}
+>
   <article>
     <div>
       <h1 class="text-zinc-50 text-5xl mb-2 font-light">{title}</h1>
-      <div class="text-sm text-zinc-400 mt-4">
-        <FormattedDate date={pubDate} />
-        {
-          updatedDate && (
-            <span class="italic">
-              (Last updated on <FormattedDate date={updatedDate} />)
-            </span>
-          )
-        }
-      </div>
+      <ArticleMeta pubDate={pubDate} updatedDate={updatedDate} />
     </div>
     <div
       class="prose-invert prose-lg prose-h2:text-lg prose-h2:font-bold prose-a:underline prose-ol:list-decimal prose-ul:list-disc mt-14"

@@ -1,0 +1,24 @@
+---
+import FormattedDate from "./FormattedDate.astro";
+
+interface Props {
+  pubDate: Date;
+  updatedDate?: Date;
+}
+
+const { pubDate, updatedDate } = Astro.props;
+---
+
+<div class="text-sm text-zinc-400 flex flex-wrap gap-4 items-center">
+  <span>
+    <FormattedDate date={pubDate} />
+  </span>
+
+  {
+    updatedDate && updatedDate.getTime() !== pubDate.getTime() && (
+      <span class="italic">
+        Updated <FormattedDate date={updatedDate} />
+      </span>
+    )
+  }
+</div>

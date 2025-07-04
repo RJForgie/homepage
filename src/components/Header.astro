@@ -1,5 +1,7 @@
 ---
+// Header component for the site introduction area
 import { AUTHOR } from "@consts";
+import Link from "@components/Link.astro";
 ---
 
 <header>
@@ -16,13 +18,7 @@ import { AUTHOR } from "@consts";
       </p>
       <p class="mt-4">
         Find me on{" "}
-        <a
-          href={AUTHOR.linkedin}
-          class="underline hover:text-zinc-50"
-          target="_blank"
-        >
-          LinkedIn
-        </a>
+        <Link href={AUTHOR.linkedin} external> LinkedIn </Link>
         .
       </p>
     </div>

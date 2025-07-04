@@ -1,0 +1,33 @@
+---
+interface Props {
+  variant?: "primary" | "secondary";
+  size?: "sm" | "md" | "lg";
+  class?: string;
+  id?: string;
+}
+
+const {
+  variant = "secondary",
+  size = "md",
+  class: className = "",
+  id,
+} = Astro.props;
+
+const baseClasses = "border rounded-md transition-colors";
+const variantClasses = {
+  primary: "bg-zinc-700 border-zinc-600 text-zinc-50 hover:bg-zinc-600",
+  secondary:
+    "border-zinc-700 text-zinc-300 hover:text-zinc-50 hover:border-zinc-600",
+};
+const sizeClasses = {
+  sm: "px-3 py-1 text-sm",
+  md: "px-4 py-2",
+  lg: "px-6 py-3 text-lg",
+};
+
+const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
+---
+
+<button class={classes} id={id}>
+  <slot />
+</button>

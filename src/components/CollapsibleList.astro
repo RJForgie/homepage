@@ -1,0 +1,17 @@
+---
+interface Props {
+  title: string;
+  class?: string;
+}
+
+const { title, class: className = "" } = Astro.props;
+---
+
+<details class={className}>
+  <summary class="cursor-pointer hover:text-zinc-50 transition-colors">
+    {title}
+  </summary>
+  <div class="mt-2">
+    <slot />
+  </div>
+</details>
