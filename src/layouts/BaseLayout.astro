@@ -35,20 +35,31 @@ const today = new Date();
     {
       showHeader && (
         <header>
-          <h1 class="text-zinc-50 text-5xl mb-2">Ryan Forgie</h1>
-          <p>
-            I build software products and lead teams. Scottish full-stack
-            software engineer and engineering manager living in New Zealand.
-            Find me on{" "}
-            <a
-              href="https://www.linkedin.com/in/ryan-forgie/"
-              class="underline hover:text-zinc-50"
-              target="_blank"
-            >
-              LinkedIn
-            </a>
-            .
-          </p>
+          <h1 class="text-zinc-50 text-5xl mb-6 ">Ryan Forgie</h1>
+          <div class="flex items-start gap-6">
+            <img
+              src="/images/profile.jpg"
+              alt="Ryan Forgie"
+              class="hidden md:block w-32 h-32 rounded-lg object-cover flex-shrink-0"
+            />
+            <div>
+              <p>
+                I build software products and lead teams. Scottish full-stack
+                software engineer and engineering manager living in New Zealand.
+              </p>
+              <p class="mt-4">
+                Find me on{" "}
+                <a
+                  href="https://www.linkedin.com/in/ryan-forgie/"
+                  class="underline hover:text-zinc-50"
+                  target="_blank"
+                >
+                  LinkedIn
+                </a>
+                .
+              </p>
+            </div>
+          </div>
         </header>
       )
     }
