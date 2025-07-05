@@ -2,17 +2,19 @@
 // Header component for the site introduction area
 import { AUTHOR } from "@consts";
 import Link from "@components/Link.astro";
+import { Image } from "astro:assets";
+import profileImage from "../images/profile.jpg";
 ---
 
 <header role="banner" aria-label="Site header">
   <h1 class="text-zinc-50 text-5xl mb-6">{AUTHOR.name}</h1>
   <div class="flex items-start gap-6">
-    <img
-      src="/images/profile.jpg"
+    <Image
+      src={profileImage}
       alt={`${AUTHOR.name}`}
       class="hidden md:block w-32 h-32 rounded-lg object-cover flex-shrink-0"
-      width="128"
-      height="128"
+      width={128}
+      height={128}
     />
     <div>
       <p>

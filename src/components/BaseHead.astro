@@ -3,11 +3,12 @@
 // all pages through the use of the <BaseHead /> component.
 import "../styles/global.css";
 import { AUTHOR } from "@consts";
+import type { ImageMetadata } from "astro";
 
 interface Props {
   title: string;
   description: string;
-  image: string;
+  image: string | ImageMetadata;
   type?: "website" | "article";
   publishedTime?: string;
   modifiedTime?: string;
@@ -25,6 +26,9 @@ const {
   modifiedTime,
   author = AUTHOR.name,
 } = Astro.props;
+
+// Get the image URL for meta tags
+const imageURL = typeof image === "string" ? image : image.src;
 
 // Generate structured data
 const structuredData = {
@@ -75,7 +79,7 @@ const structuredData = {
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:image" content={new URL(imageURL, Astro.url)} />
 <meta property="og:site_name" content="Ryan Forgie" />
 <meta property="og:locale" content="en_US" />
 {
@@ -95,7 +99,7 @@ const structuredData = {
 <meta property="twitter:url" content={canonicalURL} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta property="twitter:image" content={new URL(imageURL, Astro.url)} />
 <meta property="twitter:creator" content="@ryanforgie" />
 
 <!-- Additional SEO -->
@@ -104,8 +108,8 @@ const structuredData = {
 <meta name="color-scheme" content="dark" />
 
 <!-- Preload critical resources -->
-<link rel="preload" href="/images/profile.jpg" as="image" />
-<link rel="preload" href="/images/social-share.png" as="image" />
+<link rel="preload" href="/src/images/profile.jpg" as="image" />
+<link rel="preload" href={imageURL} as="image" />
 
 <!-- Structured Data -->
 <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />

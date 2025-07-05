@@ -3,6 +3,7 @@ import BaseHead from "@components/BaseHead.astro";
 import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from "@consts";
 import Link from "@components/Link.astro";
 import "../styles/global.css";
+import socialShareImage from "../images/social-share.png";
 
 interface Props {
   title?: string;
@@ -31,7 +32,7 @@ const today = new Date();
     <BaseHead
       title={title}
       description={description}
-      image="/images/social-share.png"
+      image={socialShareImage}
       type={type}
       publishedTime={publishedTime}
       modifiedTime={modifiedTime}
