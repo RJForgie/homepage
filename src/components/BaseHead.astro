@@ -112,4 +112,8 @@ const structuredData = {
 <link rel="preload" href={imageURL} as="image" />
 
 <!-- Structured Data -->
-<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+<script
+  type="application/ld+json"
+  is:inline
+  set:html={JSON.stringify(structuredData)}
+/>
