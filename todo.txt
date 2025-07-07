@@ -1,6 +1,0 @@
-- robots.txt
-- RSS Feed
-- counts in headings
-- refactor filtering in section component
-- readme details
-- github action for deploy
