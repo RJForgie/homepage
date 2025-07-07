@@ -7,9 +7,11 @@ interface Props {
 const { title, class: className = "" } = Astro.props;
 ---
 
-<details class={className}>
+<details
+  class={`focus:outline-none focus:ring-0 focus:ring-offset-0 ${className}`}
+>
   <summary
-    class="cursor-pointer hover:text-zinc-50 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500 rounded"
+    class="cursor-pointer hover:text-zinc-50 transition-colors focus:outline-none focus:ring-0 focus:ring-offset-0 rounded"
   >
     {title}
   </summary>
