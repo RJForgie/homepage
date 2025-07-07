@@ -6,7 +6,7 @@ export const SITE_DESCRIPTION = "Software Engineer";
 
 export const AUTHOR = {
   name: "Ryan Forgie",
-  bio: "I build software products and lead teams. Scottish full-stack software engineer and engineering manager living in New Zealand.",
+  bio: "I build software products and lead teams. Scottish engineering manager living in Christchurch, New Zealand.",
   linkedin: "https://www.linkedin.com/in/ryan-forgie/",
   location: "New Zealand",
 };
