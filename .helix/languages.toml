@@ -1,0 +1,47 @@
+# Helix language configuration for homepage project
+# Uses project-local formatters from node_modules
+
+[[language]]
+name = "javascript"
+formatter = { command = "./node_modules/.bin/prettier", args = ["--write", "--parser", "babel"] }
+auto-format = true
+
+[[language]]
+name = "typescript"
+formatter = { command = "./node_modules/.bin/prettier", args = ["--write", "--parser", "typescript"] }
+auto-format = true
+
+[[language]]
+name = "jsx"
+formatter = { command = "./node_modules/.bin/prettier", args = ["--write", "--parser", "babel"] }
+auto-format = true
+
+[[language]]
+name = "tsx"
+formatter = { command = "./node_modules/.bin/prettier", args = ["--write", "--parser", "typescript"] }
+auto-format = true
+
+[[language]]
+name = "astro"
+formatter = { command = "./node_modules/.bin/prettier", args = ["--write", "--parser", "astro"] }
+auto-format = true
+
+[[language]]
+name = "json"
+formatter = { command = "./node_modules/.bin/prettier", args = ["--write", "--parser", "json"] }
+auto-format = true
+
+[[language]]
+name = "markdown"
+formatter = { command = "./node_modules/.bin/prettier", args = ["--write", "--parser", "markdown"] }
+auto-format = true
+
+[[language]]
+name = "css"
+formatter = { command = "./node_modules/.bin/prettier", args = ["--write", "--parser", "css"] }
+auto-format = true
+
+[[language]]
+name = "html"
+formatter = { command = "./node_modules/.bin/prettier", args = ["--write", "--parser", "html"] }
+auto-format = true
