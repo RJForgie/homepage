@@ -20,4 +20,14 @@ export default [
       },
     },
   },
+  {
+    files: ["scripts/**/*.js"],
+    languageOptions: {
+      globals: {
+        process: "readonly",
+        console: "readonly",
+      },
+      sourceType: "module",
+    },
+  },
 ];

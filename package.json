@@ -14,7 +14,9 @@
     "lint": "eslint \"src/**/*.{js,ts,astro}\"",
     "format": "prettier --write .",
     "prepare": "husky",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "new:post": "node scripts/new-content.js post",
+    "new:list": "node scripts/new-content.js list"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,astro}": [
