@@ -20,15 +20,15 @@ const modifiedTime = updatedDate ? updatedDate.toISOString() : publishedTime;
   publishedTime={publishedTime}
   modifiedTime={modifiedTime}
 >
-  <article itemscope itemtype="https://schema.org/Article">
+  <article itemscope itemtype="https://schema.org/Article" class="mt-12">
     <header>
-      <h1 class="text-zinc-50 text-base font-medium" itemprop="headline">
+      <h1 class="text-zinc-50 text-base font-medium mb-2" itemprop="headline">
         {title}
       </h1>
       <ArticleMeta pubDate={pubDate} updatedDate={updatedDate} />
     </header>
     <div
-      class="prose-invert prose-base prose-h2:text-base prose-h2:font-medium prose-a:underline prose-ol:list-decimal prose-ul:list-disc mt-12"
+      class="prose-invert prose-base prose-h2:text-base prose-h2:font-medium prose-a:underline prose-ol:list-decimal prose-ul:list-disc prose-blockquote:border-l-2 prose-blockquote:border-zinc-600 prose-blockquote:pl-4 mt-12"
       itemprop="articleBody"
     >
       <slot />

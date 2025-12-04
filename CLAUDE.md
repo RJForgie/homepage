@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Personal website and blog for Ryan Forgie (https://ryanforgie.com), built with Astro. The site features a content-driven architecture with two primary content types: field notes (blog posts) and lists (curated collections).
+Personal website and blog for Ryan Forgie (https://ryanforgie.com), built with Astro. The site features a content-driven architecture with two primary content types: posts (blog posts) and lists (curated collections).
 
 ## Development Commands
 
@@ -30,15 +30,15 @@ pnpm run format           # Format all files with Prettier
 
 The site uses Astro's content collections API with two collections defined in `src/content/config.ts`:
 
-- `field-notes/` - Blog posts and articles
+- `posts/` - Blog posts and articles
 - `lists/` - Curated lists and resources
 
 Both collections share a common schema: `title`, `description`, `pubDate`, and optional `updatedDate`.
 
 ### Routing
 
-- **Homepage** (`src/pages/index.astro`): Displays lists of field notes, lists, and projects
-- **Dynamic content routes** (`src/pages/[...slug].astro`): Catch-all route that handles both collections using the pattern `{collection}/{slug}` (e.g., `/field-notes/running-a-link-blog`, `/lists/favourite-blogs`)
+- **Homepage** (`src/pages/index.astro`): Displays lists of posts, lists, and projects
+- **Dynamic content routes** (`src/pages/[...slug].astro`): Catch-all route that handles both collections using the pattern `{collection}/{slug}` (e.g., `/posts/running-a-link-blog`, `/lists/favourite-blogs`)
 - **RSS feed** (`src/pages/rss.xml.js`): Auto-generated feed
 
 ### Layout Hierarchy
@@ -59,7 +59,7 @@ TailwindCSS v4 configured through Vite plugin. The site uses a dark theme with z
 
 To add new content:
 
-1. Create a markdown/MDX file in `src/content/field-notes/` or `src/content/lists/`
+1. Create a markdown/MDX file in `src/content/posts/` or `src/content/lists/`
 2. Include required frontmatter: `title`, `description`, `pubDate`
 3. The dynamic `[...slug].astro` route will automatically generate the page
 
