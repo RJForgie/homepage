@@ -2,11 +2,19 @@
 interface Props {
   link: string;
   title: string;
+  external?: boolean;
 }
 
-const { link, title } = Astro.props;
+const { link, title, external = false } = Astro.props;
 ---
 
 <li class="my-2">
-  <a href={link} class="underline hover:text-zinc-50">{title}</a>
+  <a
+    href={link}
+    class="underline hover:text-zinc-50"
+    target={external ? "_blank" : undefined}
+    rel={external ? "noopener noreferrer" : undefined}
+  >
+    {title}
+  </a>
 </li>

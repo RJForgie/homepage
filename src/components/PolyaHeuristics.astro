@@ -114,6 +114,17 @@ const heuristics = [
     const nextButton = document.getElementById("next-button");
     const counterElement = document.getElementById("heuristic-counter");
 
+    // Early return if any required element is missing
+    if (
+      !titleElement ||
+      !descriptionElement ||
+      !nextButton ||
+      !counterElement
+    ) {
+      console.error("PolyaHeuristics: Required elements not found");
+      return;
+    }
+
     function showNextHeuristic() {
       currentIndex = (currentIndex + 1) % heuristics.length;
       titleElement.textContent = heuristics[currentIndex].title;
