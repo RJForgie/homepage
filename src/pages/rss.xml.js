@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 
 export async function GET(context) {
-  const notes = await getCollection("field-notes");
+  const notes = await getCollection("posts");
 
   return rss({
     title: SITE_TITLE,
@@ -11,7 +11,7 @@ export async function GET(context) {
     site: context.site,
     items: notes.map((note) => ({
       ...note.data,
-      link: `/field-notes/${note.slug}/`,
+      link: `/posts/${note.slug}/`,
     })),
   });
 }

@@ -5,7 +5,7 @@ import Link from "./Link.astro";
 import CollapsibleList from "./CollapsibleList.astro";
 
 interface Props {
-  collection: "lists" | "field-notes";
+  collection: "lists" | "posts";
 }
 
 const { collection } = Astro.props;
@@ -20,8 +20,8 @@ const firstThreePosts = sortedPosts.slice(0, 3);
 const remainingPosts = sortedPosts.slice(3);
 
 const collectionTitle =
-  collection === "field-notes"
-    ? "Field Notes"
+  collection === "posts"
+    ? "Posts"
     : collection.charAt(0).toUpperCase() + collection.slice(1);
 ---
 

@@ -4,7 +4,7 @@ import type { CollectionEntry } from "astro:content";
 import ArticleMeta from "@components/ArticleMeta.astro";
 import BackLink from "@components/BackLink.astro";
 
-type Props = CollectionEntry<"field-notes" | "lists">["data"];
+type Props = CollectionEntry<"posts" | "lists">["data"];
 
 const { title, description, pubDate, updatedDate } = Astro.props;
 

@@ -12,7 +12,7 @@ export const collections = {
   lists: defineCollection({
     schema: commonSchema,
   }),
-  "field-notes": defineCollection({
+  posts: defineCollection({
     schema: commonSchema,
   }),
 };
