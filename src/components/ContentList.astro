@@ -37,13 +37,13 @@ const collectionTitle =
       {
         firstThreePosts.map((post) => (
           <li class="my-2 flex items-baseline">
+            <Link href={`/${collection}/${post.slug}/`}>{post.data.title}</Link>
             <time
               datetime={post.data.pubDate.toISOString()}
-              class="text-sm text-zinc-400 w-24 shrink-0"
+              class="text-sm text-zinc-400 ml-3"
             >
               <FormattedDate date={post.data.pubDate} />
             </time>
-            <Link href={`/${collection}/${post.slug}/`}>{post.data.title}</Link>
           </li>
         ))
       }
@@ -53,15 +53,15 @@ const collectionTitle =
             <ul>
               {remainingPosts.map((post) => (
                 <li class="my-2 flex items-baseline">
-                  <time
-                    datetime={post.data.pubDate.toISOString()}
-                    class="text-sm text-zinc-400 w-24 shrink-0"
-                  >
-                    <FormattedDate date={post.data.pubDate} />
-                  </time>
                   <Link href={`/${collection}/${post.slug}/`}>
                     {post.data.title}
                   </Link>
+                  <time
+                    datetime={post.data.pubDate.toISOString()}
+                    class="text-sm text-zinc-400 ml-3"
+                  >
+                    <FormattedDate date={post.data.pubDate} />
+                  </time>
                 </li>
               ))}
             </ul>
