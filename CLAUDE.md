@@ -20,9 +20,13 @@ pnpm run preview          # Preview production build locally
 pnpm run build            # Type-check with astro check, then build to ./dist/
 pnpm run lint             # Run ESLint on src/**/*.{js,ts,astro}
 pnpm run format           # Format all files with Prettier
+
+# Content Creation
+pnpm run new:post <slug>  # Create a new post in src/content/posts/
+pnpm run new:list <slug>  # Create a new list in src/content/lists/
 ```
 
-**Git hooks:** Husky is configured with lint-staged to auto-format and lint on commit.
+**Git hooks:** Husky pre-commit runs `lint-staged` (format + lint) then `astro check` (type-check).
 
 ## Architecture
 
@@ -39,6 +43,7 @@ Both collections share a common schema: `title`, `description`, `pubDate`, and o
 
 - **Homepage** (`src/pages/index.astro`): Displays lists of posts, lists, and projects
 - **Dynamic content routes** (`src/pages/[...slug].astro`): Catch-all route that handles both collections using the pattern `{collection}/{slug}` (e.g., `/posts/running-a-link-blog`, `/lists/favourite-blogs`)
+- **Project pages** (`src/pages/projects/`): Standalone project pages (e.g., `polya.astro`)
 - **RSS feed** (`src/pages/rss.xml.js`): Auto-generated feed
 
 ### Layout Hierarchy
@@ -50,6 +55,15 @@ Both collections share a common schema: `title`, `description`, `pubDate`, and o
 
 - `src/consts.ts` - Site-wide constants (SITE_TITLE, SITE_DESCRIPTION, AUTHOR)
 - `astro.config.mjs` - Configured with MDX, sitemap, and TailwindCSS via Vite plugin
+
+### TypeScript Path Aliases
+
+Defined in `tsconfig.json` — use these for imports:
+
+- `@consts` → `src/consts.ts`
+- `@components/*` → `src/components/*`
+- `@layouts/*` → `src/layouts/*`
+- `@content/*` → `src/content/*`
 
 ### Styling
 
