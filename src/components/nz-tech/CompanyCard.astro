@@ -1,0 +1,31 @@
+---
+import Link from "@components/Link.astro";
+import type { CompanyListItem } from "@lib/queries/companies";
+
+interface Props {
+  company: CompanyListItem;
+}
+
+const { company } = Astro.props;
+---
+
+<li
+  class="py-3 border-b border-zinc-800"
+  data-company
+  data-name={company.name.toLowerCase()}
+  data-techs={company.technologies.join(" ").toLowerCase()}
+  data-locations={company.locations.join(" ").toLowerCase()}
+>
+  <div class="flex items-baseline justify-between gap-3">
+    <Link href={`/nz-tech/companies/${company.slug}/`}>{company.name}</Link>
+    <span class="text-sm text-zinc-500 shrink-0">
+      {company.jobCount}
+      {company.jobCount === 1 ? "job" : "jobs"}
+    </span>
+  </div>
+  {
+    company.locations.length > 0 && (
+      <p class="text-sm text-zinc-500 mt-1">{company.locations.join(", ")}</p>
+    )
+  }
+</li>

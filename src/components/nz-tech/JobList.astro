@@ -1,0 +1,59 @@
+---
+import Link from "@components/Link.astro";
+import TechBadge from "./TechBadge.astro";
+import type { CompanyJob } from "@lib/queries/companies";
+import { formatLevel } from "@lib/utils/formatters";
+
+interface Props {
+  jobs: CompanyJob[];
+}
+
+const { jobs } = Astro.props;
+
+function formatDate(timestamp: number): string {
+  const date = new Date(timestamp * 1000);
+  return date.toLocaleDateString("en-NZ", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+---
+
+{
+  jobs.length === 0 ? (
+    <p class="text-zinc-400">No jobs listed</p>
+  ) : (
+    <ul>
+      {jobs.map((job) => (
+        <li class="py-4 border-b border-zinc-800 last:border-0">
+          <Link href={job.jobUrl} external>
+            {job.title}
+          </Link>
+
+          <div class="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-sm text-zinc-500">
+            {job.location && <span>{job.location}</span>}
+            {job.seniorityLevel && (
+              <span>{formatLevel(job.seniorityLevel)}</span>
+            )}
+            {job.workArrangement && (
+              <span>{formatLevel(job.workArrangement)}</span>
+            )}
+            {job.salaryText && <span>{job.salaryText}</span>}
+            <time datetime={new Date(job.postedDate * 1000).toISOString()}>
+              {formatDate(job.postedDate)}
+            </time>
+          </div>
+
+          {job.technologies.length > 0 && (
+            <div class="flex flex-wrap gap-1 mt-2">
+              {job.technologies.map((tech) => (
+                <TechBadge name={tech} />
+              ))}
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
+  )
+}

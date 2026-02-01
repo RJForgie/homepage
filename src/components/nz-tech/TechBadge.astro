@@ -1,0 +1,15 @@
+---
+interface Props {
+  name: string;
+  count?: number;
+}
+
+const { name, count } = Astro.props;
+---
+
+<span
+  class="inline-block px-2 py-1 text-sm border border-zinc-700 rounded text-zinc-300"
+>
+  {name}
+  {count !== undefined && <span class="text-zinc-500 ml-1">({count})</span>}
+</span>

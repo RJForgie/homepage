@@ -1,0 +1,72 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Link from "@components/Link.astro";
+import CompanyCard from "@components/nz-tech/CompanyCard.astro";
+import { getCompaniesForDirectory } from "@lib/queries/companies";
+
+const companies = await getCompaniesForDirectory();
+---
+
+<BaseLayout
+  title="NZ Tech Companies"
+  description={`Directory of ${companies.length} technology companies hiring in New Zealand`}
+>
+  <nav class="mb-8" aria-label="Back navigation">
+    <Link href="/nz-tech/">← Back to NZ Tech</Link>
+  </nav>
+
+  <h1 class="text-zinc-50 text-base font-medium mb-2">Companies</h1>
+  <p class="text-zinc-400 mb-6">
+    {companies.length} direct employers with active technology roles.
+  </p>
+
+  <div class="mb-6">
+    <input
+      type="search"
+      id="company-search"
+      placeholder="Search by name, technology, or location..."
+      class="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded text-zinc-300 placeholder-zinc-500 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 focus:ring-offset-zinc-900"
+      aria-label="Search companies by name, technology, or location"
+    />
+    <p id="search-count" class="text-sm text-zinc-500 mt-2" aria-live="polite">
+    </p>
+  </div>
+
+  <ul id="company-list">
+    {companies.map((company) => <CompanyCard company={company} />)}
+  </ul>
+
+  <script>
+    const searchInput = document.getElementById(
+      "company-search",
+    ) as HTMLInputElement;
+    const searchCount = document.getElementById("search-count")!;
+    const items = document.querySelectorAll("[data-company]");
+    const total = items.length;
+
+    searchInput?.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase().trim();
+
+      if (!query) {
+        items.forEach((el) => ((el as HTMLElement).style.display = ""));
+        searchCount.textContent = "";
+        return;
+      }
+
+      let visible = 0;
+      items.forEach((el) => {
+        const name = el.getAttribute("data-name") ?? "";
+        const techs = el.getAttribute("data-techs") ?? "";
+        const locations = el.getAttribute("data-locations") ?? "";
+        const matches =
+          name.includes(query) ||
+          techs.includes(query) ||
+          locations.includes(query);
+        (el as HTMLElement).style.display = matches ? "" : "none";
+        if (matches) visible++;
+      });
+
+      searchCount.textContent = `${visible} of ${total} companies`;
+    });
+  </script>
+</BaseLayout>

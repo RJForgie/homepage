@@ -1,0 +1,114 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Link from "@components/Link.astro";
+import StatCard from "@components/nz-tech/StatCard.astro";
+import TechBadge from "@components/nz-tech/TechBadge.astro";
+import { getTrendStats } from "@lib/queries/trends";
+import { formatCount, formatLevel } from "@lib/utils/formatters";
+
+const stats = await getTrendStats();
+---
+
+<BaseLayout
+  title="NZ Tech Landscape"
+  description="Data on New Zealand's technology job market — companies, technologies, and trends"
+>
+  <nav class="mb-8" aria-label="Back navigation">
+    <Link href="/">← Back to home</Link>
+  </nav>
+
+  <h1 class="text-zinc-50 text-base font-medium mb-3">NZ Tech Landscape</h1>
+  <p class="text-zinc-400 mb-8">
+    Data from {formatCount(stats.totalJobs)} job listings across {
+      formatCount(stats.totalCompanies)
+    } companies in New Zealand.
+  </p>
+
+  <section class="grid grid-cols-2 gap-4 mb-12" aria-label="Key statistics">
+    <StatCard label="Jobs Scraped" value={formatCount(stats.totalJobs)} />
+    <StatCard
+      label="Relevant Tech Jobs"
+      value={formatCount(stats.totalRelevantJobs)}
+    />
+    <StatCard
+      label="Companies"
+      value={stats.totalDirectEmployers.toString()}
+      sublabel="direct employers"
+    />
+    <StatCard
+      label="Total Companies"
+      value={stats.totalCompanies.toString()}
+      sublabel="including agencies"
+    />
+  </section>
+
+  <section class="mb-12" aria-labelledby="tech-heading">
+    <h2 id="tech-heading" class="text-zinc-50 text-base font-medium mb-4">
+      Most In-Demand Technologies
+    </h2>
+    <div class="flex flex-wrap gap-2">
+      {
+        stats.topTechnologies.map((tech) => (
+          <TechBadge name={tech.name} count={tech.count} />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="mb-12" aria-labelledby="locations-heading">
+    <h2 id="locations-heading" class="text-zinc-50 text-base font-medium mb-4">
+      Jobs by Location
+    </h2>
+    <ul>
+      {
+        stats.topLocations.map((loc) => (
+          <li class="my-2 flex items-baseline justify-between">
+            <span class="text-zinc-300">{loc.name}</span>
+            <span class="text-zinc-500 text-sm">{formatCount(loc.count)}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="mb-12" aria-labelledby="seniority-heading">
+    <h2 id="seniority-heading" class="text-zinc-50 text-base font-medium mb-4">
+      Seniority Distribution
+    </h2>
+    <ul>
+      {
+        stats.seniorityBreakdown.map((s) => (
+          <li class="my-2 flex items-baseline justify-between">
+            <span class="text-zinc-300">{formatLevel(s.level)}</span>
+            <span class="text-zinc-500 text-sm">{formatCount(s.count)}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  {
+    stats.workArrangementBreakdown.length > 0 && (
+      <section class="mb-12" aria-labelledby="arrangement-heading">
+        <h2
+          id="arrangement-heading"
+          class="text-zinc-50 text-base font-medium mb-4"
+        >
+          Work Arrangement
+        </h2>
+        <ul>
+          {stats.workArrangementBreakdown.map((a) => (
+            <li class="my-2 flex items-baseline justify-between">
+              <span class="text-zinc-300 capitalize">{a.arrangement}</span>
+              <span class="text-zinc-500 text-sm">{formatCount(a.count)}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <nav class="mt-8">
+    <Link href="/nz-tech/companies/">Browse all companies →</Link>
+  </nav>
+</BaseLayout>

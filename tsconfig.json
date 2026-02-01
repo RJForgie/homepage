@@ -9,7 +9,8 @@
       "@consts": ["src/consts.ts"],
       "@components/*": ["src/components/*"],
       "@layouts/*": ["src/layouts/*"],
-      "@content/*": ["src/content/*"]
+      "@content/*": ["src/content/*"],
+      "@lib/*": ["src/lib/*"]
     }
   }
 }

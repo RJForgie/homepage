@@ -1,0 +1,86 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Link from "@components/Link.astro";
+import TechBadge from "@components/nz-tech/TechBadge.astro";
+import JobList from "@components/nz-tech/JobList.astro";
+import {
+  getCompaniesForDirectory,
+  getCompanyBySlug,
+  type CompanyListItem,
+} from "@lib/queries/companies";
+
+interface Props {
+  companies: CompanyListItem[];
+}
+
+export async function getStaticPaths() {
+  const companies = await getCompaniesForDirectory();
+  return companies.map((c) => ({
+    params: { slug: c.slug },
+    props: { companies },
+  }));
+}
+
+const { slug } = Astro.params;
+const { companies } = Astro.props;
+const company = await getCompanyBySlug(slug!, companies);
+
+if (!company) {
+  return Astro.redirect("/nz-tech/companies/");
+}
+---
+
+<BaseLayout
+  title={`${company.name} — NZ Tech`}
+  description={company.description || `Technology jobs at ${company.name}`}
+>
+  <nav class="mb-8" aria-label="Back navigation">
+    <Link href="/nz-tech/companies/">← Back to companies</Link>
+  </nav>
+
+  <article>
+    <header class="mb-8">
+      <h1 class="text-zinc-50 text-base font-medium mb-2">{company.name}</h1>
+      {
+        company.description && (
+          <p class="text-zinc-400 mb-4">{company.description}</p>
+        )
+      }
+
+      <div class="flex flex-wrap gap-x-3 text-sm text-zinc-500">
+        <span>{company.jobCount} {company.jobCount === 1 ? "job" : "jobs"}</span
+        >
+        {
+          company.locations.length > 0 && (
+            <span>{company.locations.join(", ")}</span>
+          )
+        }
+      </div>
+    </header>
+
+    {
+      company.technologies.length > 0 && (
+        <section class="mb-8" aria-labelledby="tech-stack-heading">
+          <h2
+            id="tech-stack-heading"
+            class="text-zinc-50 text-base font-medium mb-3"
+          >
+            Tech Stack
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            {company.technologies.map((tech) => (
+              <TechBadge name={tech} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section aria-labelledby="jobs-heading">
+      <h2 id="jobs-heading" class="text-zinc-50 text-base font-medium mb-3">
+        Open Positions ({company.jobs.length})
+      </h2>
+      <JobList jobs={company.jobs} />
+    </section>
+  </article>
+</BaseLayout>
