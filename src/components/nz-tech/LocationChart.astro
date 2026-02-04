@@ -1,0 +1,52 @@
+---
+// Horizontal bar chart for jobs by location
+// Clicking a city expands an inline detail panel with that city's top techs + companies
+// Rendered client-side with Chart.js
+---
+
+<section class="mb-12" aria-labelledby="location-heading">
+  <h2 id="location-heading" class="text-zinc-50 text-base font-medium mb-1">
+    Jobs by Location
+  </h2>
+  <p class="text-sm text-zinc-500 mb-4">
+    Click a city to see its top technologies and companies
+  </p>
+
+  <div class="relative" style="height: 320px;">
+    <canvas id="location-chart"></canvas>
+  </div>
+
+  <!-- Drill-down detail panel (hidden until a city is selected) -->
+  <div
+    id="location-detail"
+    class="mt-4 border border-zinc-700 rounded-lg p-5"
+    style="display: none;"
+  >
+    <div class="flex items-baseline justify-between mb-4">
+      <h3 class="text-zinc-50 font-medium" id="location-detail-title">
+        &nbsp;
+      </h3>
+      <button
+        type="button"
+        id="location-detail-close"
+        class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+      >
+        Close
+      </button>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div>
+        <p class="text-xs text-zinc-500 uppercase tracking-wide mb-2">
+          Top Technologies
+        </p>
+        <div id="location-detail-techs" class="space-y-1"></div>
+      </div>
+      <div>
+        <p class="text-xs text-zinc-500 uppercase tracking-wide mb-2">
+          Top Companies
+        </p>
+        <div id="location-detail-companies" class="space-y-1"></div>
+      </div>
+    </div>
+  </div>
+</section>

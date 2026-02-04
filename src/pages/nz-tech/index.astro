@@ -2,113 +2,753 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Link from "@components/Link.astro";
 import StatCard from "@components/nz-tech/StatCard.astro";
-import TechBadge from "@components/nz-tech/TechBadge.astro";
-import { getTrendStats } from "@lib/queries/trends";
-import { formatCount, formatLevel } from "@lib/utils/formatters";
+import TechDemandChart from "@components/nz-tech/TechDemandChart.astro";
+import CompanyChart from "@components/nz-tech/CompanyChart.astro";
+import MarketComposition from "@components/nz-tech/MarketComposition.astro";
+import LocationChart from "@components/nz-tech/LocationChart.astro";
+import NewThisWeek from "@components/nz-tech/NewThisWeek.astro";
+import { getDashboardData } from "@lib/queries/insights";
+import {
+  CHART_COLORS,
+  CATEGORY_COLORS,
+  CATEGORY_LABELS,
+  getChartDefaults,
+} from "@lib/charts/config";
+import { formatCount } from "@lib/utils/formatters";
 
-const stats = await getTrendStats();
+const dashboardData = await getDashboardData();
+
+const { jobs } = dashboardData;
+
+// Time windows for stat cards
+const now = Math.floor(Date.now() / 1000);
+const thirtyDaysAgo = now - 30 * 24 * 60 * 60;
+const oneWeekAgo = now - 7 * 24 * 60 * 60;
+const recentJobs = jobs.filter((j) => j.postedDate >= thirtyDaysAgo);
+
+const activeRoles = recentJobs.length;
+const companiesHiring = new Set(recentJobs.map((j) => j.companyId)).size;
+const newThisWeek = recentJobs.filter((j) => j.postedDate >= oneWeekAgo).length;
+
+const companyCounts = new Map<string, number>();
+for (const job of recentJobs) {
+  companyCounts.set(
+    job.companyName,
+    (companyCounts.get(job.companyName) ?? 0) + 1,
+  );
+}
+const mostActive =
+  [...companyCounts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
+
+// 3-month window for charts
+const threeMonthsAgo = now - 90 * 24 * 60 * 60;
+const chartJobs = jobs.filter((j) => j.postedDate >= threeMonthsAgo);
+
+const serializedJobs = JSON.stringify(chartJobs);
+const serializedChartColors = JSON.stringify(CHART_COLORS);
+const serializedCategoryColors = JSON.stringify(CATEGORY_COLORS);
+const serializedCategoryLabels = JSON.stringify(CATEGORY_LABELS);
+const serializedChartDefaults = JSON.stringify(getChartDefaults());
 ---
 
 <BaseLayout
   title="NZ Tech Landscape"
-  description="Data on New Zealand's technology job market — companies, technologies, and trends"
+  description="Dashboard of New Zealand's technology job market — technologies, companies, locations, and trends"
 >
   <nav class="mb-8" aria-label="Back navigation">
     <Link href="/">← Back to home</Link>
   </nav>
 
-  <h1 class="text-zinc-50 text-base font-medium mb-3">NZ Tech Landscape</h1>
-  <p class="text-zinc-400 mb-8">
-    Data from {formatCount(stats.totalJobs)} job listings across {
-      formatCount(stats.totalCompanies)
-    } companies in New Zealand.
+  <h1 class="text-zinc-50 text-base font-medium mb-1">NZ Tech Landscape</h1>
+  <p class="text-zinc-400 mb-6">
+    {formatCount(activeRoles)} active roles across <a
+      href="/nz-tech/companies/"
+      class="text-zinc-300 underline hover:text-zinc-50 transition-colors"
+      >{formatCount(companiesHiring)} companies</a
+    > in the last 30 days.
   </p>
 
-  <section class="grid grid-cols-2 gap-4 mb-12" aria-label="Key statistics">
-    <StatCard label="Jobs Scraped" value={formatCount(stats.totalJobs)} />
-    <StatCard
-      label="Relevant Tech Jobs"
-      value={formatCount(stats.totalRelevantJobs)}
-    />
-    <StatCard
-      label="Companies"
-      value={stats.totalDirectEmployers.toString()}
-      sublabel="direct employers"
-    />
-    <StatCard
-      label="Total Companies"
-      value={stats.totalCompanies.toString()}
-      sublabel="including agencies"
-    />
-  </section>
-
-  <section class="mb-12" aria-labelledby="tech-heading">
-    <h2 id="tech-heading" class="text-zinc-50 text-base font-medium mb-4">
-      Most In-Demand Technologies
-    </h2>
-    <div class="flex flex-wrap gap-2">
-      {
-        stats.topTechnologies.map((tech) => (
-          <TechBadge name={tech.name} count={tech.count} />
-        ))
-      }
+  <!-- Key Metrics (30-day window) -->
+  <section class="mb-12" aria-label="Key statistics">
+    <p class="text-xs text-zinc-500 uppercase tracking-wide mb-3">
+      Last 30 days
+    </p>
+    <div class="grid grid-cols-2 gap-4">
+      <StatCard label="Active Roles" value={formatCount(activeRoles)} />
+      <StatCard label="Companies Hiring" value={formatCount(companiesHiring)} />
+      <StatCard label="New This Week" value={formatCount(newThisWeek)} />
+      <StatCard label="Most Active" value={mostActive} />
     </div>
   </section>
 
-  <section class="mb-12" aria-labelledby="locations-heading">
-    <h2 id="locations-heading" class="text-zinc-50 text-base font-medium mb-4">
-      Jobs by Location
-    </h2>
-    <ul>
-      {
-        stats.topLocations.map((loc) => (
-          <li class="my-2 flex items-baseline justify-between">
-            <span class="text-zinc-300">{loc.name}</span>
-            <span class="text-zinc-500 text-sm">{formatCount(loc.count)}</span>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
+  <!-- New This Week -->
+  <NewThisWeek />
 
-  <section class="mb-12" aria-labelledby="seniority-heading">
-    <h2 id="seniority-heading" class="text-zinc-50 text-base font-medium mb-4">
-      Seniority Distribution
-    </h2>
-    <ul>
-      {
-        stats.seniorityBreakdown.map((s) => (
-          <li class="my-2 flex items-baseline justify-between">
-            <span class="text-zinc-300">{formatLevel(s.level)}</span>
-            <span class="text-zinc-500 text-sm">{formatCount(s.count)}</span>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
+  <!-- Last 3 months -->
+  <p class="text-xs text-zinc-500 uppercase tracking-wide mb-6">
+    Last 3 months
+  </p>
 
-  {
-    stats.workArrangementBreakdown.length > 0 && (
-      <section class="mb-12" aria-labelledby="arrangement-heading">
-        <h2
-          id="arrangement-heading"
-          class="text-zinc-50 text-base font-medium mb-4"
-        >
-          Work Arrangement
-        </h2>
-        <ul>
-          {stats.workArrangementBreakdown.map((a) => (
-            <li class="my-2 flex items-baseline justify-between">
-              <span class="text-zinc-300 capitalize">{a.arrangement}</span>
-              <span class="text-zinc-500 text-sm">{formatCount(a.count)}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )
-  }
-
-  <nav class="mt-8">
-    <Link href="/nz-tech/companies/">Browse all companies →</Link>
-  </nav>
+  <CompanyChart />
+  <LocationChart />
+  <TechDemandChart />
+  <MarketComposition />
 </BaseLayout>
+
+<script
+  is:inline
+  src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script
+  is:inline
+  define:vars={{
+    serializedJobs,
+    serializedChartColors,
+    serializedCategoryColors,
+    serializedCategoryLabels,
+    serializedChartDefaults,
+  }}
+>
+  (function () {
+    var Chart = window.Chart;
+    var allJobs = JSON.parse(serializedJobs);
+    var COLORS = JSON.parse(serializedChartColors);
+    var CAT_COLORS = JSON.parse(serializedCategoryColors);
+    var CAT_LABELS = JSON.parse(serializedCategoryLabels);
+    var defaults = JSON.parse(serializedChartDefaults);
+
+    Chart.defaults.font.family = defaults.font.family;
+    Chart.defaults.font.size = defaults.font.size;
+    Chart.defaults.color = defaults.color;
+
+    var now = Math.floor(Date.now() / 1000);
+    var oneWeekAgo = now - 7 * 24 * 60 * 60;
+
+    // -- New this week (national) --
+
+    (function () {
+      var recentJobs = allJobs
+        .filter(function (j) {
+          return j.postedDate >= oneWeekAgo;
+        })
+        .sort(function (a, b) {
+          return b.postedDate - a.postedDate;
+        });
+
+      var summaryEl = document.getElementById("new-this-week-summary");
+      var listEl = document.getElementById("new-this-week-list");
+      var contentEl = document.getElementById("new-this-week-content");
+      var emptyEl = document.getElementById("new-this-week-empty");
+      var subtitleEl = document.getElementById("new-this-week-subtitle");
+
+      if (subtitleEl)
+        subtitleEl.textContent = "Recent activity across New Zealand";
+
+      if (recentJobs.length === 0) {
+        if (contentEl) contentEl.style.display = "none";
+        if (emptyEl) emptyEl.style.display = "";
+        return;
+      }
+
+      if (contentEl) contentEl.style.display = "";
+      if (emptyEl) emptyEl.style.display = "none";
+
+      var uniqueCos = {};
+      recentJobs.forEach(function (j) {
+        uniqueCos[j.companyId] = true;
+      });
+      var coCount = Object.keys(uniqueCos).length;
+
+      if (summaryEl) {
+        summaryEl.textContent =
+          recentJobs.length +
+          " new role" +
+          (recentJobs.length !== 1 ? "s" : "") +
+          " posted this week across " +
+          coCount +
+          " compan" +
+          (coCount !== 1 ? "ies" : "y");
+      }
+
+      if (listEl) {
+        function fmtDate(ts) {
+          return new Date(ts * 1000).toLocaleDateString("en-NZ", {
+            month: "short",
+            day: "numeric",
+          });
+        }
+        listEl.innerHTML = recentJobs
+          .slice(0, 20)
+          .map(function (j) {
+            return (
+              '<li class="flex items-baseline justify-between gap-2">' +
+              '<span class="text-zinc-300 truncate">' +
+              j.title +
+              ' <span class="text-zinc-600">at</span> ' +
+              '<a href="/nz-tech/companies/' +
+              j.companySlug +
+              '/" class="text-zinc-400 hover:text-zinc-300 underline">' +
+              j.companyName +
+              "</a></span>" +
+              '<span class="text-zinc-600 text-xs shrink-0">' +
+              fmtDate(j.postedDate) +
+              "</span></li>"
+            );
+          })
+          .join("");
+      }
+    })();
+
+    // -- Tech demand chart (national) --
+
+    (function () {
+      var techCounts = {};
+      var techCategories = {};
+      allJobs.forEach(function (job) {
+        job.technologies.forEach(function (t) {
+          techCounts[t.name] = (techCounts[t.name] || 0) + 1;
+          techCategories[t.name] = t.category || "other";
+        });
+      });
+
+      var data = Object.entries(techCounts)
+        .sort(function (a, b) {
+          return b[1] - a[1];
+        })
+        .slice(0, 20)
+        .map(function (e) {
+          return { name: e[0], count: e[1], category: techCategories[e[0]] };
+        });
+
+      var labels = data.map(function (d) {
+        return d.name;
+      });
+      var values = data.map(function (d) {
+        return d.count;
+      });
+      var colors = data.map(function (d, i) {
+        return i === 0
+          ? COLORS.accent
+          : CAT_COLORS[d.category] || CAT_COLORS.other;
+      });
+
+      // Legend
+      var legendEl = document.getElementById("tech-legend");
+      if (legendEl) {
+        var seen = {};
+        var cats = [];
+        data.forEach(function (d) {
+          if (!seen[d.category]) {
+            seen[d.category] = true;
+            cats.push(d.category);
+          }
+        });
+        legendEl.innerHTML = cats
+          .map(function (cat) {
+            return (
+              '<span class="flex items-center gap-1">' +
+              '<span class="inline-block w-2.5 h-2.5 rounded-sm" style="background:' +
+              (CAT_COLORS[cat] || CAT_COLORS.other) +
+              '"></span>' +
+              '<span class="text-zinc-500">' +
+              (CAT_LABELS[cat] || cat) +
+              "</span></span>"
+            );
+          })
+          .join("");
+      }
+
+      var ctx = document.getElementById("tech-demand-chart");
+      if (!ctx) return;
+
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              data: values,
+              backgroundColor: colors,
+              borderColor: colors,
+              borderWidth: 1,
+              borderRadius: 2,
+              barPercentage: 0.7,
+            },
+          ],
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: COLORS.zinc800,
+              borderColor: COLORS.zinc700,
+              borderWidth: 1,
+              titleColor: COLORS.zinc50,
+              bodyColor: COLORS.zinc300,
+              cornerRadius: 4,
+              callbacks: {
+                label: function (ctx) {
+                  return ctx.parsed.x + " jobs";
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              grid: { color: COLORS.zinc800 },
+              ticks: { color: COLORS.zinc500 },
+            },
+            y: { grid: { display: false }, ticks: { color: COLORS.zinc300 } },
+          },
+        },
+      });
+    })();
+
+    // -- Location chart with drill-down --
+
+    (function () {
+      var locCounts = {};
+      var locTechs = {};
+      var locCompanies = {};
+
+      allJobs.forEach(function (j) {
+        var loc = j.locationName;
+        locCounts[loc] = (locCounts[loc] || 0) + 1;
+
+        if (!locTechs[loc]) locTechs[loc] = {};
+        j.technologies.forEach(function (t) {
+          locTechs[loc][t.name] = (locTechs[loc][t.name] || 0) + 1;
+        });
+
+        if (!locCompanies[loc]) locCompanies[loc] = {};
+        locCompanies[loc][j.companyName] =
+          (locCompanies[loc][j.companyName] || 0) + 1;
+      });
+
+      var sortedLocs = Object.entries(locCounts).sort(function (a, b) {
+        return b[1] - a[1];
+      });
+
+      var labels = sortedLocs.map(function (e) {
+        return e[0];
+      });
+      var values = sortedLocs.map(function (e) {
+        return e[1];
+      });
+
+      var ctx = document.getElementById("location-chart");
+      if (!ctx) return;
+
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              data: values,
+              backgroundColor: COLORS.accentMuted,
+              borderColor: COLORS.accent,
+              borderWidth: 1,
+              borderRadius: 2,
+              barPercentage: 0.7,
+            },
+          ],
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          onClick: function (_evt, elements) {
+            if (elements.length > 0) {
+              var idx = elements[0].index;
+              showLocationDetail(labels[idx]);
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: COLORS.zinc800,
+              borderColor: COLORS.zinc700,
+              borderWidth: 1,
+              titleColor: COLORS.zinc50,
+              bodyColor: COLORS.zinc300,
+              cornerRadius: 4,
+              callbacks: {
+                label: function (ctx) {
+                  return ctx.parsed.x + " tech roles";
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              grid: { color: COLORS.zinc800 },
+              ticks: { color: COLORS.zinc500 },
+            },
+            y: {
+              grid: { display: false },
+              ticks: { color: COLORS.zinc300 },
+              afterFit: function (axis) {
+                axis.width = 250;
+              },
+            },
+          },
+        },
+      });
+
+      function showLocationDetail(city) {
+        var panel = document.getElementById("location-detail");
+        var titleEl = document.getElementById("location-detail-title");
+        var techsEl = document.getElementById("location-detail-techs");
+        var companiesEl = document.getElementById("location-detail-companies");
+        if (!panel || !titleEl || !techsEl || !companiesEl) return;
+
+        titleEl.textContent =
+          city + " — " + (locCounts[city] || 0) + " tech roles";
+        panel.style.display = "";
+
+        // Top techs for this city
+        var cityTechs = Object.entries(locTechs[city] || {})
+          .sort(function (a, b) {
+            return b[1] - a[1];
+          })
+          .slice(0, 8);
+        techsEl.innerHTML = cityTechs
+          .map(function (e) {
+            return (
+              '<div class="flex items-baseline justify-between">' +
+              '<span class="text-zinc-300 text-sm">' +
+              e[0] +
+              "</span>" +
+              '<span class="text-zinc-600 text-xs">' +
+              e[1] +
+              "</span></div>"
+            );
+          })
+          .join("");
+
+        // Top companies for this city
+        var cityCompanies = Object.entries(locCompanies[city] || {})
+          .sort(function (a, b) {
+            return b[1] - a[1];
+          })
+          .slice(0, 8);
+        companiesEl.innerHTML = cityCompanies
+          .map(function (e) {
+            return (
+              '<div class="flex items-baseline justify-between">' +
+              '<span class="text-zinc-300 text-sm">' +
+              e[0] +
+              "</span>" +
+              '<span class="text-zinc-600 text-xs">' +
+              e[1] +
+              "</span></div>"
+            );
+          })
+          .join("");
+
+        panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      var closeBtn = document.getElementById("location-detail-close");
+      if (closeBtn) {
+        closeBtn.addEventListener("click", function () {
+          var panel = document.getElementById("location-detail");
+          if (panel) panel.style.display = "none";
+        });
+      }
+    })();
+
+    // -- Company chart (national) --
+
+    (function () {
+      var companyCounts = {};
+      var companyMeta = {};
+      allJobs.forEach(function (job) {
+        if (job.companyType !== "direct_employer") return;
+        companyCounts[job.companyName] =
+          (companyCounts[job.companyName] || 0) + 1;
+        if (!companyMeta[job.companyName]) {
+          companyMeta[job.companyName] = {
+            slug: job.companySlug,
+            type: job.companyType,
+            hasRecent: false,
+          };
+        }
+        if (job.postedDate >= oneWeekAgo) {
+          companyMeta[job.companyName].hasRecent = true;
+        }
+      });
+
+      var data = Object.entries(companyCounts)
+        .sort(function (a, b) {
+          return b[1] - a[1];
+        })
+        .slice(0, 15)
+        .map(function (e) {
+          return {
+            name: e[0],
+            count: e[1],
+            slug: companyMeta[e[0]].slug,
+            type: companyMeta[e[0]].type,
+            hasRecent: companyMeta[e[0]].hasRecent,
+          };
+        });
+
+      var labels = data.map(function (d) {
+        return d.name;
+      });
+      var values = data.map(function (d) {
+        return d.count;
+      });
+      var bgColors = data.map(function () {
+        return COLORS.accent;
+      });
+      var borderColors = bgColors;
+
+      var ctx = document.getElementById("company-chart");
+      if (!ctx) return;
+
+      var hoveredLabel = -1;
+
+      function getLabelIndex(chart, evt) {
+        var yScale = chart.scales.y;
+        if (!yScale || evt.x > chart.chartArea.left) return -1;
+        for (var i = 0; i < labels.length; i++) {
+          var yPos = yScale.getPixelForTick(i);
+          var half =
+            (yScale.getPixelForTick(1) - yScale.getPixelForTick(0)) / 2;
+          if (Math.abs(evt.y - yPos) < Math.abs(half)) return i;
+        }
+        return -1;
+      }
+
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              data: values,
+              backgroundColor: bgColors,
+              borderColor: borderColors,
+              borderWidth: 1,
+              borderRadius: 2,
+              barPercentage: 0.7,
+            },
+          ],
+        },
+        plugins: [
+          {
+            id: "labelClick",
+            afterEvent: function (chart, args) {
+              var evt = args.event;
+              var idx = getLabelIndex(chart, evt);
+              var canvas = chart.canvas;
+              if (evt.type === "click" && idx >= 0) {
+                var slug = data[idx].slug;
+                if (slug)
+                  window.location.href = "/nz-tech/companies/" + slug + "/";
+              }
+              if (hoveredLabel !== idx) {
+                hoveredLabel = idx;
+                chart.draw();
+              }
+              canvas.style.cursor =
+                idx >= 0 || args.inChartArea ? "pointer" : "default";
+            },
+            afterDraw: function (chart) {
+              if (hoveredLabel < 0) return;
+              var yScale = chart.scales.y;
+              var tickItems = yScale._labelItems;
+              if (!tickItems || !tickItems[hoveredLabel]) return;
+              var item = tickItems[hoveredLabel];
+              var cCtx = chart.ctx;
+              cCtx.save();
+              cCtx.font = item.font.string;
+              var textW = cCtx.measureText(labels[hoveredLabel]).width;
+              var x = item.translation[0];
+              var y = item.translation[1] + 2;
+              cCtx.strokeStyle = COLORS.zinc300;
+              cCtx.lineWidth = 1;
+              cCtx.beginPath();
+              cCtx.moveTo(x - textW, y);
+              cCtx.lineTo(x, y);
+              cCtx.stroke();
+              cCtx.restore();
+            },
+          },
+        ],
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          onClick: function (_evt, elements) {
+            if (elements.length > 0) {
+              var slug = data[elements[0].index].slug;
+              if (slug)
+                window.location.href = "/nz-tech/companies/" + slug + "/";
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: COLORS.zinc800,
+              borderColor: COLORS.zinc700,
+              borderWidth: 1,
+              titleColor: COLORS.zinc50,
+              bodyColor: COLORS.zinc300,
+              cornerRadius: 4,
+              callbacks: {
+                label: function (ctx) {
+                  var d = data[ctx.dataIndex];
+                  var txt = ctx.parsed.x + " jobs";
+                  if (d.hasRecent) txt += " (posted this week)";
+                  return txt;
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              grid: { color: COLORS.zinc800 },
+              ticks: { color: COLORS.zinc500 },
+            },
+            y: {
+              grid: { display: false },
+              ticks: { color: COLORS.zinc300 },
+              afterFit: function (axis) {
+                axis.width = 250;
+              },
+            },
+          },
+        },
+      });
+    })();
+
+    // -- Seniority breakdown doughnut --
+
+    (function () {
+      var senCounts = {};
+      allJobs.forEach(function (job) {
+        var level = job.seniorityLevel;
+        if (!level) return;
+        senCounts[level] = (senCounts[level] || 0) + 1;
+      });
+
+      var order = [
+        "junior",
+        "mid",
+        "senior",
+        "lead",
+        "principal",
+        "management",
+        "senior_management",
+      ];
+      var sorted = order
+        .filter(function (k) {
+          return senCounts[k];
+        })
+        .map(function (k) {
+          return { level: k, count: senCounts[k] };
+        });
+
+      function formatLevel(s) {
+        return s.replace(/_/g, " ").replace(/\b\w/g, function (c) {
+          return c.toUpperCase();
+        });
+      }
+
+      var segmentColors = [
+        "#38bdf8",
+        "#34d399",
+        "#fb923c",
+        "#a78bfa",
+        "#f472b6",
+        "#fbbf24",
+        "#818cf8",
+      ];
+
+      var labels = sorted.map(function (d) {
+        return formatLevel(d.level);
+      });
+      var values = sorted.map(function (d) {
+        return d.count;
+      });
+      var colors = sorted.map(function (_, i) {
+        return segmentColors[i % segmentColors.length];
+      });
+
+      var total = values.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+
+      // Legend
+      var legendEl = document.getElementById("seniority-legend");
+      if (legendEl) {
+        legendEl.innerHTML = sorted
+          .map(function (d, i) {
+            var pct = ((d.count / total) * 100).toFixed(0);
+            return (
+              '<div class="flex items-center gap-2">' +
+              '<span class="inline-block w-2.5 h-2.5 rounded-sm shrink-0" style="background:' +
+              colors[i] +
+              '"></span>' +
+              '<span class="text-zinc-300">' +
+              formatLevel(d.level) +
+              "</span>" +
+              '<span class="text-zinc-600">' +
+              d.count +
+              " (" +
+              pct +
+              "%)</span>" +
+              "</div>"
+            );
+          })
+          .join("");
+      }
+
+      var ctx = document.getElementById("seniority-chart");
+      if (!ctx) return;
+
+      new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              data: values,
+              backgroundColor: colors,
+              borderColor: COLORS.zinc900,
+              borderWidth: 2,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "55%",
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: COLORS.zinc800,
+              borderColor: COLORS.zinc700,
+              borderWidth: 1,
+              titleColor: COLORS.zinc50,
+              bodyColor: COLORS.zinc300,
+              cornerRadius: 4,
+              callbacks: {
+                label: function (ctx) {
+                  var pct = ((ctx.parsed / total) * 100).toFixed(0);
+                  return ctx.parsed + " roles (" + pct + "%)";
+                },
+              },
+            },
+          },
+        },
+      });
+    })();
+  })();
+</script>

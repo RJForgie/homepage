@@ -3,13 +3,20 @@ interface Props {
   label: string;
   value: string | number;
   sublabel?: string;
+  id?: string;
 }
 
-const { label, value, sublabel } = Astro.props;
+const { label, value, sublabel, id } = Astro.props;
 ---
 
-<div class="border border-zinc-700 rounded-lg p-6">
+<div class="border border-zinc-700 rounded-lg p-6" data-stat={id}>
   <p class="text-sm text-zinc-400 mb-1">{label}</p>
-  <p class="text-2xl font-medium text-zinc-50">{value}</p>
-  {sublabel && <p class="text-sm text-zinc-400 mt-1">{sublabel}</p>}
+  <p class="text-3xl font-medium text-zinc-50" data-stat-value>{value}</p>
+  {
+    sublabel && (
+      <p class="text-sm text-zinc-500 mt-1" data-stat-sublabel>
+        {sublabel}
+      </p>
+    )
+  }
 </div>

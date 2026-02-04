@@ -1,0 +1,20 @@
+---
+// Horizontal bar chart for top hiring companies
+// Rendered client-side with Chart.js, responds to location filter
+---
+
+<section class="mb-12" aria-labelledby="company-chart-heading">
+  <h2
+    id="company-chart-heading"
+    class="text-zinc-50 text-base font-medium mb-1"
+  >
+    Top Hiring Companies
+  </h2>
+  <p class="text-sm text-zinc-500 mb-4" id="company-chart-subtitle">
+    Top 15 direct employers by job count
+  </p>
+
+  <div class="relative" style="height: 420px;">
+    <canvas id="company-chart"></canvas>
+  </div>
+</section>

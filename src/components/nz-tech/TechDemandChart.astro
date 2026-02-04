@@ -1,0 +1,20 @@
+---
+// Horizontal bar chart for top technologies
+// Rendered client-side with Chart.js, responds to location filter
+---
+
+<section class="mb-12" aria-labelledby="tech-demand-heading">
+  <h2 id="tech-demand-heading" class="text-zinc-50 text-base font-medium mb-1">
+    Technology Demand
+  </h2>
+  <p class="text-sm text-zinc-500 mb-4" id="tech-demand-subtitle">
+    Top 20 technologies across all of New Zealand
+  </p>
+
+  <div id="tech-legend" class="flex flex-wrap gap-x-4 gap-y-1 mb-4 text-xs">
+  </div>
+
+  <div class="relative" style="height: 520px;">
+    <canvas id="tech-demand-chart"></canvas>
+  </div>
+</section>
