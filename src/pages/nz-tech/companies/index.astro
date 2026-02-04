@@ -3,8 +3,51 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import Link from "@components/Link.astro";
 import CompanyCard from "@components/nz-tech/CompanyCard.astro";
 import { getCompaniesForDirectory } from "@lib/queries/companies";
+import { getDashboardData } from "@lib/queries/insights";
 
-const companies = await getCompaniesForDirectory();
+const [companies, dashboardData] = await Promise.all([
+  getCompaniesForDirectory(),
+  getDashboardData(),
+]);
+
+const { jobs } = dashboardData;
+
+// Compute per-company metadata: type and recency
+const now = Math.floor(Date.now() / 1000);
+const oneWeekAgo = now - 7 * 24 * 60 * 60;
+
+const companyTypeMap = new Map<number, string | null>();
+const companyRecentMap = new Map<number, boolean>();
+for (const job of jobs) {
+  if (!companyTypeMap.has(job.companyId)) {
+    companyTypeMap.set(job.companyId, job.companyType);
+  }
+  if (job.postedDate >= oneWeekAgo) {
+    companyRecentMap.set(job.companyId, true);
+  }
+}
+
+// Top locations and technologies for filter chips
+const locationCounts = new Map<string, number>();
+const techCounts = new Map<string, number>();
+for (const company of companies) {
+  for (const loc of company.locations) {
+    locationCounts.set(loc, (locationCounts.get(loc) ?? 0) + company.jobCount);
+  }
+  for (const tech of company.technologies) {
+    techCounts.set(tech, (techCounts.get(tech) ?? 0) + 1);
+  }
+}
+
+const topLocations = [...locationCounts.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 8)
+  .map(([name]) => name);
+
+const topTechnologies = [...techCounts.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 15)
+  .map(([name]) => name);
 ---
 
 <BaseLayout
@@ -20,53 +63,318 @@ const companies = await getCompaniesForDirectory();
     {companies.length} direct employers with active technology roles.
   </p>
 
-  <div class="mb-6">
+  <!-- Filter bar -->
+  <div class="space-y-4 mb-6">
+    <!-- Text search -->
     <input
       type="search"
       id="company-search"
       placeholder="Search by name, technology, or location..."
-      class="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded text-zinc-300 placeholder-zinc-500 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 focus:ring-offset-zinc-900"
+      class="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded text-zinc-300 placeholder-zinc-500 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-sky-400/50 focus:border-sky-400/50"
       aria-label="Search companies by name, technology, or location"
     />
-    <p id="search-count" class="text-sm text-zinc-500 mt-2" aria-live="polite">
-    </p>
+
+    <!-- Location chips -->
+    <div>
+      <p class="text-xs text-zinc-500 uppercase tracking-wide mb-2">Location</p>
+      <div
+        class="flex flex-wrap gap-2"
+        id="location-chips"
+        aria-label="Filter by location"
+      >
+        {
+          topLocations.map((loc) => (
+            <button
+              type="button"
+              class="px-2.5 py-1 text-xs border border-zinc-700 rounded-full text-zinc-400 hover:text-zinc-300 hover:border-zinc-500 transition-colors"
+              data-location-chip={loc.toLowerCase()}
+            >
+              {loc}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Technology chips -->
+    <div>
+      <p class="text-xs text-zinc-500 uppercase tracking-wide mb-2">
+        Technology
+      </p>
+      <div
+        class="flex flex-wrap gap-2"
+        id="tech-chips"
+        aria-label="Filter by technology"
+      >
+        {
+          topTechnologies.map((tech) => (
+            <button
+              type="button"
+              class="px-2.5 py-1 text-xs border border-zinc-700 rounded-full text-zinc-400 hover:text-zinc-300 hover:border-zinc-500 transition-colors whitespace-nowrap"
+              data-tech-chip={tech.toLowerCase()}
+            >
+              {tech}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Sort + filter summary -->
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+      <label class="flex items-center gap-2 text-xs text-zinc-500">
+        Sort by
+        <select
+          id="sort-select"
+          class="bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-xs text-zinc-300 font-mono focus:outline-none focus:ring-2 focus:ring-sky-400/50"
+        >
+          <option value="name">Name</option>
+          <option value="jobs">Job count</option>
+          <option value="recent">Recently active</option>
+        </select>
+      </label>
+      <div class="flex items-center gap-2">
+        <p id="filter-summary" class="text-sm text-zinc-500" aria-live="polite">
+        </p>
+        <button
+          type="button"
+          id="clear-filters"
+          class="text-xs text-zinc-500 hover:text-zinc-300 underline transition-colors"
+          style="display:none;"
+        >
+          Clear all
+        </button>
+      </div>
+    </div>
   </div>
 
   <ul id="company-list">
-    {companies.map((company) => <CompanyCard company={company} />)}
+    {
+      companies.map((company) => (
+        <CompanyCard
+          company={company}
+          companyType={companyTypeMap.get(company.id)}
+          hasRecentActivity={companyRecentMap.get(company.id) ?? false}
+        />
+      ))
+    }
   </ul>
+</BaseLayout>
 
-  <script>
-    const searchInput = document.getElementById(
-      "company-search",
-    ) as HTMLInputElement;
-    const searchCount = document.getElementById("search-count")!;
-    const items = document.querySelectorAll("[data-company]");
-    const total = items.length;
+<script>
+  const searchInput = document.getElementById(
+    "company-search",
+  ) as HTMLInputElement;
+  const filterSummary = document.getElementById("filter-summary")!;
+  const clearBtn = document.getElementById("clear-filters")!;
+  const sortSelect = document.getElementById(
+    "sort-select",
+  ) as HTMLSelectElement;
+  const items = document.querySelectorAll("[data-company]");
+  const total = items.length;
+  const companyList = document.getElementById("company-list")!;
 
-    searchInput?.addEventListener("input", () => {
-      const query = searchInput.value.toLowerCase().trim();
+  let activeLocations = new Set<string>();
+  let activeTechs = new Set<string>();
 
-      if (!query) {
-        items.forEach((el) => ((el as HTMLElement).style.display = ""));
-        searchCount.textContent = "";
-        return;
+  // Read URL params
+  const params = new URLSearchParams(window.location.search);
+  const initialLocation = params.get("location");
+  const initialTech = params.get("tech");
+  const initialSort = params.get("sort");
+
+  if (initialLocation) {
+    initialLocation
+      .split(",")
+      .forEach((l) => activeLocations.add(l.toLowerCase()));
+  }
+  if (initialTech) {
+    initialTech.split(",").forEach((t) => activeTechs.add(t.toLowerCase()));
+  }
+  if (initialSort && sortSelect) {
+    sortSelect.value = initialSort;
+  }
+
+  // Apply initial chip styling
+  function updateChipStyles() {
+    document.querySelectorAll("[data-location-chip]").forEach((btn) => {
+      const val = (btn as HTMLElement).getAttribute("data-location-chip") ?? "";
+      if (activeLocations.has(val)) {
+        btn.classList.add("bg-sky-400/10", "border-sky-400/50", "text-sky-400");
+        btn.classList.remove("border-zinc-700", "text-zinc-400");
+      } else {
+        btn.classList.remove(
+          "bg-sky-400/10",
+          "border-sky-400/50",
+          "text-sky-400",
+        );
+        btn.classList.add("border-zinc-700", "text-zinc-400");
       }
+    });
+    document.querySelectorAll("[data-tech-chip]").forEach((btn) => {
+      const val = (btn as HTMLElement).getAttribute("data-tech-chip") ?? "";
+      if (activeTechs.has(val)) {
+        btn.classList.add("bg-sky-400/10", "border-sky-400/50", "text-sky-400");
+        btn.classList.remove("border-zinc-700", "text-zinc-400");
+      } else {
+        btn.classList.remove(
+          "bg-sky-400/10",
+          "border-sky-400/50",
+          "text-sky-400",
+        );
+        btn.classList.add("border-zinc-700", "text-zinc-400");
+      }
+    });
+  }
 
-      let visible = 0;
-      items.forEach((el) => {
-        const name = el.getAttribute("data-name") ?? "";
-        const techs = el.getAttribute("data-techs") ?? "";
-        const locations = el.getAttribute("data-locations") ?? "";
-        const matches =
+  function filterAndSort() {
+    const query = searchInput?.value.toLowerCase().trim() ?? "";
+    const hasFilters =
+      query || activeLocations.size > 0 || activeTechs.size > 0;
+
+    let visible = 0;
+
+    // Filter
+    items.forEach((el) => {
+      const name = el.getAttribute("data-name") ?? "";
+      const techs = el.getAttribute("data-techs") ?? "";
+      const locations = el.getAttribute("data-locations") ?? "";
+
+      let matches = true;
+
+      // Text search
+      if (query) {
+        matches =
           name.includes(query) ||
           techs.includes(query) ||
           locations.includes(query);
-        (el as HTMLElement).style.display = matches ? "" : "none";
-        if (matches) visible++;
-      });
+      }
 
-      searchCount.textContent = `${visible} of ${total} companies`;
+      // Location filter
+      if (matches && activeLocations.size > 0) {
+        const companyLocations = locations.split(" ");
+        matches = [...activeLocations].some((loc) =>
+          companyLocations.some((cl) => cl.includes(loc)),
+        );
+      }
+
+      // Tech filter
+      if (matches && activeTechs.size > 0) {
+        const companyTechs = techs.split(" ");
+        matches = [...activeTechs].some((tech) =>
+          companyTechs.some((ct) => ct.includes(tech)),
+        );
+      }
+
+      (el as HTMLElement).style.display = matches ? "" : "none";
+      if (matches) visible++;
     });
-  </script>
-</BaseLayout>
+
+    // Sort
+    const sortBy = sortSelect?.value || "name";
+    const arr = [...items].filter(
+      (el) => (el as HTMLElement).style.display !== "none",
+    );
+
+    arr.sort((a, b) => {
+      if (sortBy === "jobs") {
+        const aJobs = parseInt(
+          a.querySelector(".shrink-0")?.textContent ?? "0",
+        );
+        const bJobs = parseInt(
+          b.querySelector(".shrink-0")?.textContent ?? "0",
+        );
+        return bJobs - aJobs;
+      }
+      if (sortBy === "recent") {
+        const aRecent = a.querySelector(".text-sky-400\\/80") ? 1 : 0;
+        const bRecent = b.querySelector(".text-sky-400\\/80") ? 1 : 0;
+        if (bRecent !== aRecent) return bRecent - aRecent;
+      }
+      const aName = a.getAttribute("data-name") ?? "";
+      const bName = b.getAttribute("data-name") ?? "";
+      return aName.localeCompare(bName);
+    });
+
+    // Re-order DOM
+    arr.forEach((el) => companyList.appendChild(el));
+    // Also append hidden ones to maintain order
+    [...items]
+      .filter((el) => (el as HTMLElement).style.display === "none")
+      .forEach((el) => companyList.appendChild(el));
+
+    // Update summary
+    const parts: string[] = [];
+    parts.push(`Showing ${visible} of ${total} companies`);
+    if (activeLocations.size > 0) {
+      parts.push(`in ${[...activeLocations].join(", ")}`);
+    }
+    if (activeTechs.size > 0) {
+      parts.push(`using ${[...activeTechs].join(", ")}`);
+    }
+    filterSummary.textContent = hasFilters ? parts.join(" ") : "";
+    clearBtn.style.display = hasFilters ? "" : "none";
+
+    // Update URL
+    const url = new URL(window.location.href);
+    if (activeLocations.size > 0) {
+      url.searchParams.set("location", [...activeLocations].join(","));
+    } else {
+      url.searchParams.delete("location");
+    }
+    if (activeTechs.size > 0) {
+      url.searchParams.set("tech", [...activeTechs].join(","));
+    } else {
+      url.searchParams.delete("tech");
+    }
+    if (sortBy !== "name") {
+      url.searchParams.set("sort", sortBy);
+    } else {
+      url.searchParams.delete("sort");
+    }
+    history.replaceState(null, "", url);
+
+    updateChipStyles();
+  }
+
+  // Wire up event listeners
+  searchInput?.addEventListener("input", filterAndSort);
+  sortSelect?.addEventListener("change", filterAndSort);
+
+  document.querySelectorAll("[data-location-chip]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const val = (btn as HTMLElement).getAttribute("data-location-chip") ?? "";
+      if (activeLocations.has(val)) {
+        activeLocations.delete(val);
+      } else {
+        activeLocations.add(val);
+      }
+      filterAndSort();
+    });
+  });
+
+  document.querySelectorAll("[data-tech-chip]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const val = (btn as HTMLElement).getAttribute("data-tech-chip") ?? "";
+      if (activeTechs.has(val)) {
+        activeTechs.delete(val);
+      } else {
+        activeTechs.add(val);
+      }
+      filterAndSort();
+    });
+  });
+
+  clearBtn.addEventListener("click", () => {
+    activeLocations.clear();
+    activeTechs.clear();
+    if (searchInput) searchInput.value = "";
+    if (sortSelect) sortSelect.value = "name";
+    filterAndSort();
+  });
+
+  // Apply initial filters
+  if (activeLocations.size > 0 || activeTechs.size > 0 || initialSort) {
+    filterAndSort();
+  }
+</script>

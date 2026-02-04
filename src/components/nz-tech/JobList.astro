@@ -1,6 +1,5 @@
 ---
 import Link from "@components/Link.astro";
-import TechBadge from "./TechBadge.astro";
 import type { CompanyJob } from "@lib/queries/companies";
 import { formatLevel } from "@lib/utils/formatters";
 
@@ -27,15 +26,19 @@ function formatDate(timestamp: number): string {
     <ul>
       {jobs.map((job) => (
         <li class="py-4 border-b border-zinc-800 last:border-0">
-          <Link href={job.jobUrl} external>
-            {job.title}
-          </Link>
+          <div class="flex items-center gap-2 flex-wrap">
+            <Link href={job.jobUrl} external>
+              {job.title}
+            </Link>
+            {job.seniorityLevel && (
+              <span class="px-2 py-0.5 text-xs rounded-full bg-zinc-800 border border-zinc-700 text-zinc-400">
+                {formatLevel(job.seniorityLevel)}
+              </span>
+            )}
+          </div>
 
           <div class="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-sm text-zinc-500">
             {job.location && <span>{job.location}</span>}
-            {job.seniorityLevel && (
-              <span>{formatLevel(job.seniorityLevel)}</span>
-            )}
             {job.workArrangement && (
               <span>{formatLevel(job.workArrangement)}</span>
             )}
@@ -44,14 +47,6 @@ function formatDate(timestamp: number): string {
               {formatDate(job.postedDate)}
             </time>
           </div>
-
-          {job.technologies.length > 0 && (
-            <div class="flex flex-wrap gap-1 mt-2">
-              {job.technologies.map((tech) => (
-                <TechBadge name={tech} />
-              ))}
-            </div>
-          )}
         </li>
       ))}
     </ul>

@@ -1,12 +1,16 @@
 ---
 import Link from "@components/Link.astro";
+import TechBadge from "./TechBadge.astro";
 import type { CompanyListItem } from "@lib/queries/companies";
 
 interface Props {
   company: CompanyListItem;
+  companyType?: string | null;
+  hasRecentActivity?: boolean;
 }
 
-const { company } = Astro.props;
+const { company, companyType, hasRecentActivity = false } = Astro.props;
+const isAgency = companyType === "recruitment_agency";
 ---
 
 <li
@@ -17,7 +21,21 @@ const { company } = Astro.props;
   data-locations={company.locations.join(" ").toLowerCase()}
 >
   <div class="flex items-baseline justify-between gap-3">
-    <Link href={`/nz-tech/companies/${company.slug}/`}>{company.name}</Link>
+    <div class="flex items-baseline gap-2 min-w-0">
+      <Link href={`/nz-tech/companies/${company.slug}/`}>{company.name}</Link>
+      {
+        isAgency && (
+          <span class="text-xs text-zinc-600 border border-zinc-700 rounded px-1.5 py-0.5 shrink-0">
+            Agency
+          </span>
+        )
+      }
+      {
+        hasRecentActivity && (
+          <span class="text-xs text-sky-400/80 shrink-0">new</span>
+        )
+      }
+    </div>
     <span class="text-sm text-zinc-500 shrink-0">
       {company.jobCount}
       {company.jobCount === 1 ? "job" : "jobs"}
@@ -26,6 +44,20 @@ const { company } = Astro.props;
   {
     company.locations.length > 0 && (
       <p class="text-sm text-zinc-500 mt-1">{company.locations.join(", ")}</p>
+    )
+  }
+  {
+    company.technologies.length > 0 && (
+      <div class="flex flex-wrap gap-1 mt-2">
+        {company.technologies.slice(0, 5).map((tech) => (
+          <TechBadge name={tech} />
+        ))}
+        {company.technologies.length > 5 && (
+          <span class="text-xs text-zinc-600 self-center">
+            +{company.technologies.length - 5} more
+          </span>
+        )}
+      </div>
     )
   }
 </li>
