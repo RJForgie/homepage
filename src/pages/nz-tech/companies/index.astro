@@ -12,16 +12,12 @@ const [companies, dashboardData] = await Promise.all([
 
 const { jobs } = dashboardData;
 
-// Compute per-company metadata: type and recency
+// Compute per-company recency
 const now = Math.floor(Date.now() / 1000);
 const oneWeekAgo = now - 7 * 24 * 60 * 60;
 
-const companyTypeMap = new Map<number, string | null>();
 const companyRecentMap = new Map<number, boolean>();
 for (const job of jobs) {
-  if (!companyTypeMap.has(job.companyId)) {
-    companyTypeMap.set(job.companyId, job.companyType);
-  }
   if (job.postedDate >= oneWeekAgo) {
     companyRecentMap.set(job.companyId, true);
   }
@@ -52,7 +48,7 @@ const topTechnologies = [...techCounts.entries()]
 
 <BaseLayout
   title="NZ Tech Companies"
-  description={`Directory of ${companies.length} technology companies hiring in New Zealand`}
+  description={`Directory of ${companies.length} technology companies in New Zealand`}
 >
   <nav class="mb-8" aria-label="Back navigation">
     <Link href="/nz-tech/">← Back to NZ Tech</Link>
@@ -60,92 +56,125 @@ const topTechnologies = [...techCounts.entries()]
 
   <h1 class="text-zinc-50 text-base font-medium mb-2">Companies</h1>
   <p class="text-zinc-400 mb-6">
-    {companies.length} direct employers with active technology roles.
+    {companies.length} technology companies in New Zealand.
   </p>
 
-  <!-- Filter bar -->
-  <div class="space-y-4 mb-6">
-    <!-- Text search -->
-    <input
-      type="search"
-      id="company-search"
-      placeholder="Search by name, technology, or location..."
-      class="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded text-zinc-300 placeholder-zinc-500 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-sky-400/50 focus:border-sky-400/50"
-      aria-label="Search companies by name, technology, or location"
-    />
-
-    <!-- Location chips -->
-    <div>
-      <p class="text-xs text-zinc-500 uppercase tracking-wide mb-2">Location</p>
-      <div
-        class="flex flex-wrap gap-2"
-        id="location-chips"
-        aria-label="Filter by location"
+  <!-- Toolbar: search + sort + filter toggle on one row -->
+  <div class="border border-zinc-800 rounded-lg bg-zinc-900/50 p-3 mb-4">
+    <div class="flex items-center gap-3">
+      <input
+        type="search"
+        id="company-search"
+        placeholder="Search companies..."
+        class="flex-1 min-w-0 px-3 py-1.5 bg-zinc-800/80 border border-zinc-700/60 rounded text-zinc-300 placeholder-zinc-500 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-sky-400/40 focus:border-sky-400/40"
+        aria-label="Search companies by name, technology, or location"
+      />
+      <select
+        id="sort-select"
+        class="bg-zinc-800/80 border border-zinc-700/60 rounded px-2.5 py-1.5 text-xs text-zinc-400 font-mono focus:outline-none focus:ring-2 focus:ring-sky-400/40 shrink-0"
+        aria-label="Sort companies"
       >
-        {
-          topLocations.map((loc) => (
-            <button
-              type="button"
-              class="px-2.5 py-1 text-xs border border-zinc-700 rounded-full text-zinc-400 hover:text-zinc-300 hover:border-zinc-500 transition-colors"
-              data-location-chip={loc.toLowerCase()}
-            >
-              {loc}
-            </button>
-          ))
-        }
-      </div>
-    </div>
-
-    <!-- Technology chips -->
-    <div>
-      <p class="text-xs text-zinc-500 uppercase tracking-wide mb-2">
-        Technology
-      </p>
-      <div
-        class="flex flex-wrap gap-2"
-        id="tech-chips"
-        aria-label="Filter by technology"
+        <option value="name">Sort: Name</option>
+        <option value="jobs">Sort: Jobs</option>
+        <option value="recent">Sort: Recent</option>
+      </select>
+      <button
+        type="button"
+        id="filter-toggle"
+        class="flex items-center gap-1.5 px-3 py-1.5 text-xs text-zinc-400 border border-zinc-700/60 rounded hover:text-zinc-300 hover:border-zinc-600 transition-colors shrink-0"
+        aria-expanded="false"
+        aria-controls="filter-panel"
       >
-        {
-          topTechnologies.map((tech) => (
-            <button
-              type="button"
-              class="px-2.5 py-1 text-xs border border-zinc-700 rounded-full text-zinc-400 hover:text-zinc-300 hover:border-zinc-500 transition-colors whitespace-nowrap"
-              data-tech-chip={tech.toLowerCase()}
-            >
-              {tech}
-            </button>
-          ))
-        }
-      </div>
+        <svg
+          class="w-3.5 h-3.5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+          ></path>
+        </svg>
+        Filters
+        <span
+          id="filter-count-badge"
+          class="hidden min-w-[18px] h-[18px] rounded-full bg-sky-400/20 text-sky-400 text-[11px] font-medium leading-[18px] text-center"
+        ></span>
+      </button>
     </div>
 
-    <!-- Sort + filter summary -->
-    <div class="flex items-center justify-between gap-4 flex-wrap">
-      <label class="flex items-center gap-2 text-xs text-zinc-500">
-        Sort by
-        <select
-          id="sort-select"
-          class="bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-xs text-zinc-300 font-mono focus:outline-none focus:ring-2 focus:ring-sky-400/50"
-        >
-          <option value="name">Name</option>
-          <option value="jobs">Job count</option>
-          <option value="recent">Recently active</option>
-        </select>
-      </label>
-      <div class="flex items-center gap-2">
-        <p id="filter-summary" class="text-sm text-zinc-500" aria-live="polite">
-        </p>
-        <button
-          type="button"
-          id="clear-filters"
-          class="text-xs text-zinc-500 hover:text-zinc-300 underline transition-colors"
-          style="display:none;"
-        >
-          Clear all
-        </button>
+    <!-- Collapsible filter panel -->
+    <div id="filter-panel" class="hidden mt-3 pt-3 border-t border-zinc-800/80">
+      <div class="space-y-3">
+        <!-- Location chips -->
+        <div>
+          <p class="text-[11px] text-zinc-500 uppercase tracking-wider mb-1.5">
+            Location
+          </p>
+          <div
+            class="flex flex-wrap gap-1.5"
+            id="location-chips"
+            aria-label="Filter by location"
+          >
+            {
+              topLocations.map((loc) => (
+                <button
+                  type="button"
+                  class="px-2 py-0.5 text-xs border border-zinc-700/60 rounded text-zinc-500 hover:text-zinc-300 hover:border-zinc-600 transition-colors"
+                  data-location-chip={loc.toLowerCase()}
+                >
+                  {loc}
+                </button>
+              ))
+            }
+          </div>
+        </div>
+
+        <!-- Technology chips -->
+        <div>
+          <p class="text-[11px] text-zinc-500 uppercase tracking-wider mb-1.5">
+            Technology
+          </p>
+          <div
+            class="flex flex-wrap gap-1.5"
+            id="tech-chips"
+            aria-label="Filter by technology"
+          >
+            {
+              topTechnologies.map((tech) => (
+                <button
+                  type="button"
+                  class="px-2 py-0.5 text-xs border border-zinc-700/60 rounded text-zinc-500 hover:text-zinc-300 hover:border-zinc-600 transition-colors whitespace-nowrap"
+                  data-tech-chip={tech.toLowerCase()}
+                >
+                  {tech}
+                </button>
+              ))
+            }
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+
+  <!-- Active filter tags -->
+  <div
+    id="active-filters"
+    class="hidden flex-wrap items-center gap-1.5 mb-3"
+    aria-live="polite"
+  >
+    <span id="filter-summary" class="text-xs text-zinc-500 mr-1"></span>
+    <div id="active-filter-tags" class="contents"></div>
+    <button
+      type="button"
+      id="clear-filters"
+      class="text-[11px] text-zinc-600 hover:text-zinc-400 transition-colors ml-1"
+    >
+      Clear all
+    </button>
   </div>
 
   <ul id="company-list">
@@ -153,7 +182,6 @@ const topTechnologies = [...techCounts.entries()]
       companies.map((company) => (
         <CompanyCard
           company={company}
-          companyType={companyTypeMap.get(company.id)}
           hasRecentActivity={companyRecentMap.get(company.id) ?? false}
         />
       ))
@@ -170,6 +198,11 @@ const topTechnologies = [...techCounts.entries()]
   const sortSelect = document.getElementById(
     "sort-select",
   ) as HTMLSelectElement;
+  const filterToggle = document.getElementById("filter-toggle")!;
+  const filterPanel = document.getElementById("filter-panel")!;
+  const filterCountBadge = document.getElementById("filter-count-badge")!;
+  const activeFiltersBar = document.getElementById("active-filters")!;
+  const activeFilterTags = document.getElementById("active-filter-tags")!;
   const items = document.querySelectorAll("[data-company]");
   const total = items.length;
   const companyList = document.getElementById("company-list")!;
@@ -195,36 +228,110 @@ const topTechnologies = [...techCounts.entries()]
     sortSelect.value = initialSort;
   }
 
-  // Apply initial chip styling
+  // Filter toggle
+  filterToggle.addEventListener("click", () => {
+    const expanded = filterPanel.classList.toggle("hidden");
+    filterToggle.setAttribute("aria-expanded", String(!expanded));
+  });
+
+  // Open filter panel if filters are active on load
+  if (activeLocations.size > 0 || activeTechs.size > 0) {
+    filterPanel.classList.remove("hidden");
+    filterToggle.setAttribute("aria-expanded", "true");
+  }
+
+  // Chip label map for display names
+  const chipLabelMap = new Map<string, string>();
+  document.querySelectorAll("[data-location-chip]").forEach((btn) => {
+    const val = (btn as HTMLElement).getAttribute("data-location-chip") ?? "";
+    chipLabelMap.set("loc:" + val, btn.textContent?.trim() ?? val);
+  });
+  document.querySelectorAll("[data-tech-chip]").forEach((btn) => {
+    const val = (btn as HTMLElement).getAttribute("data-tech-chip") ?? "";
+    chipLabelMap.set("tech:" + val, btn.textContent?.trim() ?? val);
+  });
+
   function updateChipStyles() {
     document.querySelectorAll("[data-location-chip]").forEach((btn) => {
       const val = (btn as HTMLElement).getAttribute("data-location-chip") ?? "";
       if (activeLocations.has(val)) {
         btn.classList.add("bg-sky-400/10", "border-sky-400/50", "text-sky-400");
-        btn.classList.remove("border-zinc-700", "text-zinc-400");
+        btn.classList.remove("border-zinc-700/60", "text-zinc-500");
       } else {
         btn.classList.remove(
           "bg-sky-400/10",
           "border-sky-400/50",
           "text-sky-400",
         );
-        btn.classList.add("border-zinc-700", "text-zinc-400");
+        btn.classList.add("border-zinc-700/60", "text-zinc-500");
       }
     });
     document.querySelectorAll("[data-tech-chip]").forEach((btn) => {
       const val = (btn as HTMLElement).getAttribute("data-tech-chip") ?? "";
       if (activeTechs.has(val)) {
         btn.classList.add("bg-sky-400/10", "border-sky-400/50", "text-sky-400");
-        btn.classList.remove("border-zinc-700", "text-zinc-400");
+        btn.classList.remove("border-zinc-700/60", "text-zinc-500");
       } else {
         btn.classList.remove(
           "bg-sky-400/10",
           "border-sky-400/50",
           "text-sky-400",
         );
-        btn.classList.add("border-zinc-700", "text-zinc-400");
+        btn.classList.add("border-zinc-700/60", "text-zinc-500");
       }
     });
+  }
+
+  function renderActiveFilterTags() {
+    const filterCount = activeLocations.size + activeTechs.size;
+    const hasFilters =
+      filterCount > 0 || (searchInput?.value.trim().length ?? 0) > 0;
+
+    // Update badge count on filter toggle button
+    if (filterCount > 0) {
+      filterCountBadge.textContent = String(filterCount);
+      filterCountBadge.classList.remove("hidden");
+    } else {
+      filterCountBadge.classList.add("hidden");
+    }
+
+    // Build active filter tags
+    activeFilterTags.innerHTML = "";
+
+    for (const loc of activeLocations) {
+      const tag = document.createElement("button");
+      tag.type = "button";
+      tag.className =
+        "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-sky-400/10 border border-sky-400/30 rounded text-sky-400 hover:bg-sky-400/20 transition-colors";
+      tag.innerHTML = `${chipLabelMap.get("loc:" + loc) ?? loc}<svg class="w-3 h-3 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>`;
+      tag.addEventListener("click", () => {
+        activeLocations.delete(loc);
+        filterAndSort();
+      });
+      activeFilterTags.appendChild(tag);
+    }
+
+    for (const tech of activeTechs) {
+      const tag = document.createElement("button");
+      tag.type = "button";
+      tag.className =
+        "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-sky-400/10 border border-sky-400/30 rounded text-sky-400 hover:bg-sky-400/20 transition-colors";
+      tag.innerHTML = `${chipLabelMap.get("tech:" + tech) ?? tech}<svg class="w-3 h-3 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>`;
+      tag.addEventListener("click", () => {
+        activeTechs.delete(tech);
+        filterAndSort();
+      });
+      activeFilterTags.appendChild(tag);
+    }
+
+    // Show/hide the active filters bar
+    if (hasFilters) {
+      activeFiltersBar.classList.remove("hidden");
+      activeFiltersBar.classList.add("flex");
+    } else {
+      activeFiltersBar.classList.add("hidden");
+      activeFiltersBar.classList.remove("flex");
+    }
   }
 
   function filterAndSort() {
@@ -279,10 +386,12 @@ const topTechnologies = [...techCounts.entries()]
     arr.sort((a, b) => {
       if (sortBy === "jobs") {
         const aJobs = parseInt(
-          a.querySelector(".shrink-0")?.textContent ?? "0",
+          a.querySelector("[data-job-count]")?.getAttribute("data-job-count") ??
+            "0",
         );
         const bJobs = parseInt(
-          b.querySelector(".shrink-0")?.textContent ?? "0",
+          b.querySelector("[data-job-count]")?.getAttribute("data-job-count") ??
+            "0",
         );
         return bJobs - aJobs;
       }
@@ -298,22 +407,12 @@ const topTechnologies = [...techCounts.entries()]
 
     // Re-order DOM
     arr.forEach((el) => companyList.appendChild(el));
-    // Also append hidden ones to maintain order
     [...items]
       .filter((el) => (el as HTMLElement).style.display === "none")
       .forEach((el) => companyList.appendChild(el));
 
     // Update summary
-    const parts: string[] = [];
-    parts.push(`Showing ${visible} of ${total} companies`);
-    if (activeLocations.size > 0) {
-      parts.push(`in ${[...activeLocations].join(", ")}`);
-    }
-    if (activeTechs.size > 0) {
-      parts.push(`using ${[...activeTechs].join(", ")}`);
-    }
-    filterSummary.textContent = hasFilters ? parts.join(" ") : "";
-    clearBtn.style.display = hasFilters ? "" : "none";
+    filterSummary.textContent = hasFilters ? `${visible} of ${total}` : "";
 
     // Update URL
     const url = new URL(window.location.href);
@@ -335,6 +434,7 @@ const topTechnologies = [...techCounts.entries()]
     history.replaceState(null, "", url);
 
     updateChipStyles();
+    renderActiveFilterTags();
   }
 
   // Wire up event listeners
