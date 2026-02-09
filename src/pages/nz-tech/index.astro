@@ -26,7 +26,7 @@ const thirtyDaysAgo = now - 30 * 24 * 60 * 60;
 const oneWeekAgo = now - 7 * 24 * 60 * 60;
 const recentJobs = jobs.filter((j) => j.postedDate >= thirtyDaysAgo);
 
-const activeRoles = recentJobs.length;
+const totalRoles = recentJobs.length;
 const companiesHiring = new Set(recentJobs.map((j) => j.companyId)).size;
 const newThisWeek = recentJobs.filter((j) => j.postedDate >= oneWeekAgo).length;
 
@@ -61,7 +61,7 @@ const serializedChartDefaults = JSON.stringify(getChartDefaults());
 
   <h1 class="text-zinc-50 text-base font-medium mb-1">NZ Tech Landscape</h1>
   <p class="text-zinc-400 mb-6">
-    {formatCount(activeRoles)} active roles across <a
+    {formatCount(totalRoles)} tech roles across <a
       href="/nz-tech/companies/"
       class="text-zinc-300 underline hover:text-zinc-50 transition-colors"
       >{formatCount(companiesHiring)} companies</a
@@ -74,7 +74,7 @@ const serializedChartDefaults = JSON.stringify(getChartDefaults());
       Last 30 days
     </p>
     <div class="grid grid-cols-2 gap-4">
-      <StatCard label="Active Roles" value={formatCount(activeRoles)} />
+      <StatCard label="Tech Roles" value={formatCount(totalRoles)} />
       <StatCard label="Companies Hiring" value={formatCount(companiesHiring)} />
       <StatCard label="New This Week" value={formatCount(newThisWeek)} />
       <StatCard label="Most Active" value={mostActive} />
