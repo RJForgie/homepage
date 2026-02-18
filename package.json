@@ -17,6 +17,8 @@
     "preinstall": "npx only-allow pnpm",
     "new:post": "node scripts/new-content.js post",
     "new:list": "node scripts/new-content.js list",
+    "db:pull": "bash scripts/db-pull.sh",
+    "db:update": "pnpm db:pull && pnpm db:types",
     "db:types": "kysely-codegen --url=./data/prod.db --out-file=src/lib/db/types.ts --dialect=sqlite",
     "test": "vitest run",
     "test:watch": "vitest"
