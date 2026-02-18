@@ -27,11 +27,16 @@ if [ -n "${GITHUB_TOKEN:-}" ]; then
     exit 1
   fi
 
-  # Step 2: download the actual file
-  curl -sL \
-    -H "Authorization: token $GITHUB_TOKEN" \
-    "$DOWNLOAD_URL" \
-    -o "$OUT_FILE"
+  echo "Resolved download URL: ${DOWNLOAD_URL%%\?*}..."
+
+  # Step 2: download the actual file (URL is already signed, no auth header needed)
+  HTTP_CODE=$(curl -sL -w '%{http_code}' "$DOWNLOAD_URL" -o "$OUT_FILE")
+
+  if [ "$HTTP_CODE" -ne 200 ]; then
+    echo "Error: download returned HTTP $HTTP_CODE" >&2
+    rm -f "$OUT_FILE"
+    exit 1
+  fi
 else
   # Local dev — use gh cli (inherits user's auth)
   DOWNLOAD_URL=$(gh api "repos/$REPO/contents/$FILE_PATH" --jq '.download_url')
