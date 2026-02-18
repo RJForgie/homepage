@@ -14,11 +14,18 @@ echo "Downloading prod.db from $REPO..."
 if [ -n "${GITHUB_TOKEN:-}" ]; then
   # CI / Cloudflare Pages — use curl with PAT
   # Step 1: get the download URL (handles Git LFS files)
-  DOWNLOAD_URL=$(curl -sL \
+  API_RESPONSE=$(curl -sL \
     -H "Authorization: token $GITHUB_TOKEN" \
     -H "Accept: application/vnd.github.v3+json" \
-    "https://api.github.com/repos/$REPO/contents/$FILE_PATH" \
-    | grep -o '"download_url":"[^"]*"' | cut -d'"' -f4)
+    "https://api.github.com/repos/$REPO/contents/$FILE_PATH")
+
+  DOWNLOAD_URL=$(echo "$API_RESPONSE" | jq -r '.download_url')
+
+  if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then
+    echo "Error: could not get download URL from GitHub API" >&2
+    echo "$API_RESPONSE" >&2
+    exit 1
+  fi
 
   # Step 2: download the actual file
   curl -sL \
