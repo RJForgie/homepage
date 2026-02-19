@@ -16,6 +16,7 @@ export interface _DrizzleMigrations {
 }
 
 export interface Companies {
+  ai_profile: string | null;
   company_type: string | null;
   created_at: Generated<number>;
   description: string | null;
@@ -57,6 +58,7 @@ export interface Locations {
 }
 
 export interface NormalizedJobs {
+  ai_profile: string | null;
   company_id: number;
   created_at: Generated<number>;
   description: string;
